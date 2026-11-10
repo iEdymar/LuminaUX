@@ -1,6 +1,6 @@
 // Configurações gerais do site. Troque o nome aqui e ele muda em todas as páginas.
 export const site = {
-  nome: 'Hub Design Ético',
+  nome: 'Lumina UX',
   descricao:
     'Um hub para profissionais de design reconhecerem, evitarem e questionarem padrões enganosos em interfaces digitais.',
   atualizado: 'novembro de 2026',
