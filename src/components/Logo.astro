@@ -1,0 +1,79 @@
+---
+/**
+ * Logo do LuminaUX: escudo digital minimalista.
+ * O escudo (traço fino, cor do texto) protege; o olho vazado no centro revela.
+ * O olho é preenchido com a cor de destaque, e a pupila é um corte negativo:
+ * por ela aparece o fundo, como uma fresta de luz.
+ *
+ * Uso: <Logo />  ·  <Logo mostrarNome={false} />  ·  <Logo class="w-10 h-10" />
+ */
+import { site } from '../data/site.js';
+
+interface Props {
+  /** Mostra o nome ao lado do símbolo. */
+  mostrarNome?: boolean;
+  /** Classes extras para o símbolo (ex.: tamanhos do Tailwind, como "w-10 h-10"). */
+  class?: string;
+  /** Cor do olho. Padrão: o neon da marca. Ex.: "#22D3EE" para ciano. */
+  destaque?: string;
+}
+
+const { mostrarNome = true, class: classe, destaque = 'var(--neon, #B9FC01)' } = Astro.props;
+---
+<span class="logo-lumina">
+  <svg
+    class:list={['logo-simbolo', classe]}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
+    fill="none"
+    aria-hidden={mostrarNome ? 'true' : undefined}
+    role={mostrarNome ? undefined : 'img'}
+    aria-label={mostrarNome ? undefined : site.nome}
+    style={`--logo-destaque: ${destaque}`}
+  >
+    <!-- Escudo: ombros retos, laterais verticais e ponta suave -->
+    <path
+      d="M16 3.5 26.5 7.25v8.25c0 6.1-4.3 10.9-10.5 13-6.2-2.1-10.5-6.9-10.5-13V7.25L16 3.5Z"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linejoin="round"
+    />
+    <!-- Olho com a pupila vazada (evenodd recorta o círculo central) -->
+    <path
+      class="logo-olho"
+      fill-rule="evenodd"
+      d="M9.5 16.25c3.6-5.2 9.4-5.2 13 0-3.6 5.2-9.4 5.2-13 0Zm6.5 2.15a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3Z"
+    />
+  </svg>
+  {mostrarNome && <span class="logo-nome">{site.nome}</span>}
+</span>
+
+<style>
+  .logo-lumina {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--branco, #efefef);
+  }
+  /* Tamanho padrão com especificidade zero: classes como "w-10 h-10" sempre vencem */
+  :global(:where(.logo-simbolo)) {
+    width: 32px;
+    height: 32px;
+  }
+  .logo-simbolo { flex: none; }
+  .logo-olho {
+    fill: var(--branco, #efefef);
+  }
+  .logo-nome {
+    font-family: var(--f-titulo, 'Poppins', sans-serif);
+    font-weight: 700;
+    font-size: 1.1875rem;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  @media (max-width: 420px) {
+    :global(:where(.logo-simbolo)) { width: 28px; height: 28px; }
+    .logo-nome { font-size: 1.0625rem; }
+  }
+</style>

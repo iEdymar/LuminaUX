@@ -1,5 +1,6 @@
 ---
 import Icone from './Icone.astro';
+import Logo from './Logo.astro';
 import { site, nav } from '../data/site.js';
 
 const atual = Astro.url.pathname;
@@ -8,8 +9,7 @@ const ativo = (href: string) => (href === '/' ? atual === '/' : atual.startsWith
 <header class="cabecalho">
   <div class="wrap cabecalho-linha">
     <a class="logo" href="/" aria-label={`${site.nome}, página inicial`}>
-      <span class="logo-marca" aria-hidden="true"></span>
-      <span>{site.nome}</span>
+      <Logo />
     </a>
 
     <nav class="nav" id="menu-principal" aria-label="Principal">
@@ -52,34 +52,8 @@ const ativo = (href: string) => (href === '/' ? atual === '/' : atual.startsWith
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-family: var(--f-titulo);
-    font-weight: 700;
-    font-size: 1.125rem;
-    letter-spacing: -0.01em;
     text-decoration: none;
-    white-space: nowrap;
     min-height: 44px;
-  }
-  /* Marca: um canto de seleção, como numa ferramenta de inspeção */
-  .logo-marca {
-    width: 22px;
-    height: 22px;
-    border: 3px solid var(--neon);
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-radius: 3px;
-    position: relative;
-  }
-  .logo-marca::after {
-    content: '';
-    position: absolute;
-    right: -3px;
-    bottom: -3px;
-    width: 8px;
-    height: 8px;
-    background: var(--neon);
-    border-radius: 2px;
   }
   .nav { margin-left: auto; }
   .nav ul { display: flex; gap: var(--s1); list-style: none; padding: 0; }
