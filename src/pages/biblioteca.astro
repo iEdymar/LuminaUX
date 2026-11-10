@@ -1,18 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import { referencias, glossario } from '../data/biblioteca.js';
+import { referencias } from '../data/biblioteca.js';
 ---
-<Base titulo="Biblioteca" descricao="Livros, artigos, relatórios de órgãos reguladores e um glossário sobre padrões enganosos e design ético.">
+<Base titulo="Biblioteca" descricao="Livros, artigos e relatórios de órgãos reguladores sobre padrões enganosos e design ético.">
   <section class="wrap cabecalho-pagina">
     <h1>Biblioteca</h1>
     <p class="lead">
-      As leituras que sustentam o hub, com um resumo de cada uma, e um glossário com os termos que aparecem nas
-      fichas.
+      As leituras que sustentam o hub, com um resumo de cada uma.
     </p>
     <nav class="ancoras" aria-label="Nesta página">
       <ul class="etiquetas">
         {referencias.map((g) => <li><a class="etiqueta" href={`#${g.grupo.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-')}`}>{g.grupo}</a></li>)}
-        <li><a class="etiqueta" href="#glossario">Glossário</a></li>
       </ul>
     </nav>
   </section>
@@ -34,17 +32,6 @@ import { referencias, glossario } from '../data/biblioteca.js';
     </section>
   ))}
 
-  <section class="wrap grupo regua" id="glossario">
-    <h2>Glossário</h2>
-    <dl class="glossario">
-      {glossario.map((g) => (
-        <div>
-          <dt>{g.termo}</dt>
-          <dd>{g.def}</dd>
-        </div>
-      ))}
-    </dl>
-  </section>
 </Base>
 
 <style>
@@ -54,8 +41,4 @@ import { referencias, glossario } from '../data/biblioteca.js';
   .grupo h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); }
   .refs > li { padding-block: var(--s4); display: grid; gap: var(--s1); max-width: var(--leitura); }
   .ref-titulo { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; line-height: 1.3; }
-  .glossario { margin: 0; display: grid; border-top: 1px solid var(--linha); }
-  .glossario div { padding-block: var(--s4); border-bottom: 1px solid var(--linha); display: grid; gap: var(--s1); max-width: var(--leitura); }
-  .glossario dt { font-weight: 600; }
-  .glossario dd { margin: 0; }
 </style>
