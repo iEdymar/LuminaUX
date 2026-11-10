@@ -1,0 +1,104 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const etapas = [
+  {
+    titulo: 'Antes da conversa, confirme',
+    texto: 'Abra a ficha do padrão e confira se a tela mostra os sinais descritos. Chegar com certeza muda o tom da conversa.',
+    frase: null,
+    links: [['Acervo de padrões', '/padroes/'], ['Árvore de decisão', '/ferramentas/arvore-de-decisao/']],
+  },
+  {
+    titulo: 'Comece pelo objetivo em comum',
+    texto: 'A gestão quer que a tela converta. Você também. Abrir pelo objetivo mostra que você não está contra o negócio.',
+    frase: 'Quero que essa tela converta bem e por muito tempo. Por isso queria mostrar um risco que encontrei.',
+  },
+  {
+    titulo: 'Mostre o risco com fatos',
+    texto: 'Troque “isso é antiético” por lei, caso real e dado. É o tipo de evidência que 20 de 25 profissionais disseram funcionar melhor com stakeholders.',
+    frase: 'Essa prática tem nome: é um padrão enganoso. O CDC trata disso no artigo que trouxe aqui, e a Adobe fechou um acordo de US$ 150 milhões num caso parecido.',
+    links: [['Kit de argumentação', '/ferramentas/kit-de-argumentacao/'], ['Casos e leis', '/casos-e-leis/']],
+  },
+  {
+    titulo: 'Leve a alternativa pronta',
+    texto: 'Não leve só um “não”. Mostre uma tela que atinge o mesmo objetivo sem manipular. As fichas trazem exemplos de como evitar.',
+    frase: 'Desenhei uma versão que mantém a oferta visível, mas deixa a escolha com o usuário. Posso mostrar?',
+  },
+  {
+    titulo: 'Combine como medir',
+    texto: 'Proponha testar a alternativa e acompanhar um número. Isso tira a discussão do campo da opinião.',
+    frase: 'Que tal testarmos as duas versões por um mês e olharmos conversão e cancelamentos juntos?',
+  },
+  {
+    titulo: 'Se a resposta for não, registre e amenize',
+    texto: 'A decisão final pode não ser sua. Registre por escrito que o risco foi apontado e proponha mudanças que reduzam o dano. Cada ficha tem uma seção “Quando a gestão diz não”.',
+    frase: 'Entendido. Vou registrar o alerta no ticket e sugerir pelo menos deixar o valor visível antes do pagamento.',
+    links: [['Registro do alerta', '/ferramentas/registro-do-alerta/']],
+  },
+];
+
+const evitar = [
+  'Acusar a pessoa ou a empresa de má-fé. Fale do efeito da tela, não da intenção de quem pediu.',
+  'Levantar a questão pela primeira vez na frente de muita gente. Uma conversa curta antes da reunião costuma funcionar melhor.',
+  'Chegar sem alternativa. Um “não” sem proposta parece bloqueio.',
+];
+---
+<Base titulo="Roteiro de conversa" descricao="Como levantar um problema ético com o PM ou a liderança sem parecer insubordinação, com frases prontas para cada etapa.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/ferramentas/">Ferramentas</a></li>
+      <li aria-current="page">Roteiro de conversa</li>
+    </ol>
+    <h1>Roteiro de conversa</h1>
+    <p class="lead">
+      Saber que uma tela é enganosa é metade do caminho. A outra metade é falar sobre isso com quem decide, sem
+      parecer que você está só dizendo não. Este roteiro segue seis etapas, com frases que você pode adaptar.
+    </p>
+  </section>
+
+  <section class="wrap">
+    <ol class="etapas">
+      {etapas.map((e, i) => (
+        <li>
+          <span class="e-num" aria-hidden="true">{i + 1}</span>
+          <div class="e-corpo">
+            <h2>{e.titulo}</h2>
+            <p class="leitura">{e.texto}</p>
+            {e.frase && (
+              <figure class="frase">
+                <figcaption class="suave pequeno">Você pode dizer</figcaption>
+                <blockquote>“{e.frase}”</blockquote>
+              </figure>
+            )}
+            {e.links && (
+              <ul class="etiquetas">
+                {e.links.map(([nome, href]) => <li><a class="etiqueta" href={href}>{nome}</a></li>)}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap secao">
+    <h2 class="secao-titulo">O que costuma atrapalhar</h2>
+    <ul class="atrapalha leitura">
+      {evitar.map((t) => <li>{t}</li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .etapas { list-style: none; padding: 0; display: grid; border-top: 1px solid var(--linha); }
+  .etapas > li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--s5); padding-block: var(--s6); border-bottom: 1px solid var(--linha); }
+  @media (min-width: 760px) { .etapas > li { grid-template-columns: 72px minmax(0, 1fr); } }
+  .e-num { font-family: var(--f-titulo); font-weight: 700; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); line-height: 1; color: var(--neon); }
+  .e-corpo { display: grid; gap: var(--s4); }
+  .e-corpo h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.875rem); }
+  .frase { margin: 0; max-width: 60ch; padding: var(--s4) var(--s5); background: var(--azul-fundo); border-radius: var(--r-ui); border-left: 3px solid var(--neon); }
+  .frase blockquote { margin: var(--s1) 0 0; font-size: 1.125rem; font-weight: 500; }
+  .atrapalha { list-style: none; padding: 0; display: grid; gap: var(--s3); }
+  .atrapalha li { padding-left: var(--s5); position: relative; }
+  .atrapalha li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 10px; height: 10px; border: 2px solid var(--neon); border-radius: 2px; }
+</style>

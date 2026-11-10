@@ -1,0 +1,102 @@
+---
+// Tela de checkout com quatro padrões escondidos. O botão "Revelar padrões" liga a camada de inspeção.
+---
+<figure class="demo">
+  <div class="demo-topo">
+    <p class="demo-rotulo">Um checkout comum. Quantos padrões enganosos você encontra?</p>
+    <button class="btn btn-primario btn-pequeno" type="button" id="revelar" aria-pressed="false" aria-controls="tela-demo">
+      <span class="revelar-texto">Revelar padrões</span>
+    </button>
+  </div>
+
+  <div class="tela inspecao-controlada" id="tela-demo">
+    <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>loja.exemplo/checkout</p></div>
+    <div class="tela-corpo">
+      <p class="tela-titulo">Finalizar compra</p>
+
+      <div class="linha-preco">
+        <span>Fone Bluetooth Pro</span>
+        <span>R$ 299,90</span>
+      </div>
+
+      <div class="alvo aviso">
+        Oferta termina em <span data-contador="598">09:58</span>
+        <a class="marcacao" href="/padroes/urgencia-falsa/"><b>1</b>Urgência falsa</a>
+      </div>
+
+      <div class="alvo caixa">
+        <span class="quadrado marcado" aria-hidden="true"></span>
+        <span>Proteção estendida por 12 meses <strong>+ R$ 49,90</strong></span>
+        <a class="marcacao" href="/padroes/pre-selecao/"><b>2</b>Pré-seleção</a>
+      </div>
+
+      <div>
+        <div class="linha-preco miudo"><span>Subtotal</span><span>R$ 349,80</span></div>
+        <div class="alvo linha-preco miudo taxa">
+          <span>Taxa de serviço</span><span>R$ 14,90</span>
+          <a class="marcacao" href="/padroes/custos-ocultos/"><b>3</b>Custo oculto</a>
+        </div>
+      </div>
+
+      <div class="linha-preco total"><span>Total</span><span>R$ 364,70</span></div>
+
+      <span class="botao-tela">Pagar agora</span>
+
+      <div class="alvo link-tela">
+        Não, prefiro arriscar sem proteção
+        <a class="marcacao" href="/padroes/misdirection/"><b>4</b>Misdirection</a>
+      </div>
+    </div>
+  </div>
+
+  <figcaption class="demo-legenda" aria-live="polite" id="demo-legenda">
+    Tela fictícia, criada para este hub.
+  </figcaption>
+</figure>
+
+<style>
+  .demo { margin: 0; display: grid; gap: var(--s4); }
+  .demo-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+  }
+  .demo-rotulo { font-weight: 600; max-width: 30ch; }
+  .demo .tela { max-width: 420px; width: 100%; justify-self: center; }
+  .demo-legenda { font-size: 0.875rem; color: var(--suave); text-align: center; }
+  .demo .alvo { padding: 2px 0; }
+  .demo .alvo.caixa { padding-right: 4px; }
+  .demo .taxa { margin-top: 6px; }
+  .demo .revelado .taxa { margin-top: 26px; }
+</style>
+
+<script>
+  const botao = document.getElementById('revelar');
+  const tela = document.getElementById('tela-demo');
+  const legenda = document.getElementById('demo-legenda');
+  botao?.addEventListener('click', () => {
+    const ligado = botao.getAttribute('aria-pressed') === 'true';
+    botao.setAttribute('aria-pressed', String(!ligado));
+    tela?.classList.toggle('revelado', !ligado);
+    const texto = botao.querySelector('.revelar-texto');
+    if (texto) texto.textContent = ligado ? 'Revelar padrões' : 'Esconder padrões';
+    if (legenda) {
+      legenda.textContent = ligado
+        ? 'Tela fictícia, criada para este hub.'
+        : '4 padrões nesta tela. Toque em cada marcação para abrir a ficha.';
+    }
+  });
+
+  // Contadores falsos: quando chegam a zero, voltam ao início (é assim que a urgência falsa costuma funcionar).
+  document.querySelectorAll('[data-contador]').forEach((el) => {
+    const inicio = Number(el.getAttribute('data-contador')) || 600;
+    let resta = inicio;
+    const formatar = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    setInterval(() => {
+      resta = resta <= 0 ? 600 : resta - 1;
+      el.textContent = formatar(resta);
+    }, 1000);
+  });
+</script>

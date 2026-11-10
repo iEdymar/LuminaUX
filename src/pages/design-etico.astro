@@ -1,0 +1,132 @@
+---
+import Base from '../layouts/Base.astro';
+import { principios } from '../data/principios.js';
+import { getPadrao } from '../data/padroes.js';
+---
+<Base titulo="Design ético" descricao="Oito princípios para persuadir sem manipular, com boas práticas para o dia a dia e os padrões enganosos que cada um combate.">
+  <section class="wrap cabecalho-pagina">
+    <h1>Design ético</h1>
+    <p class="lead">
+      Design ético é projetar interfaces que ajudam as pessoas a decidir, em vez de decidir por elas. Os oito
+      princípios abaixo reúnem o que a pesquisa em design, interação humano-computador e economia comportamental
+      aponta como o limite entre persuadir e manipular.
+    </p>
+  </section>
+
+  <section class="wrap sumario-secao">
+    <h2 class="visualmente-oculto">Os oito princípios</h2>
+    <ul class="sumario">
+      {principios.map((p) => (
+        <li>
+          <a href={`#${p.slug}`}>
+            <span class="s-nome">{p.nome}</span>
+            <span class="s-frase">{p.frase}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {principios.map((p) => (
+    <section class="wrap principio regua" id={p.slug} aria-labelledby={`t-${p.slug}`}>
+      <div class="p-cabeca">
+        <h2 id={`t-${p.slug}`}>{p.nome}</h2>
+        <p class="p-frase">{p.frase}</p>
+      </div>
+      <div class="p-corpo leitura">
+        <div class="prosa">
+          {p.texto.map((t) => <p>{t}</p>)}
+        </div>
+        {p.lista && (
+          <dl class="p-lista">
+            {p.lista.map(([termo, def]) => (
+              <div><dt>{termo}</dt><dd>{def}</dd></div>
+            ))}
+          </dl>
+        )}
+        {p.textoFinal && <div class="prosa" style="margin-top: var(--s4)">{p.textoFinal.map((t) => <p>{t}</p>)}</div>}
+
+        <h3>Na prática</h3>
+        <ul class="pratica">
+          {p.pratica.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <div class="p-rodape">
+          <div>
+            <p class="rotulo">Combate</p>
+            {!Array.isArray(p.combate) ? (
+              <p>Todas as fichas do <a href="/padroes/">acervo</a>.</p>
+            ) : (
+              <ul class="etiquetas">
+                {p.combate.map((s) => {
+                  const f = getPadrao(s);
+                  return <li><a class="etiqueta" href={`/padroes/${s}/`}>{f.tecnico}</a></li>;
+                })}
+              </ul>
+            )}
+          </div>
+          <div>
+            <p class="rotulo">Base</p>
+            <p class="suave pequeno">{p.base}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="wrap secao">
+    <p class="suave leitura pequeno">
+      As referências completas estão na <a href="/biblioteca/">Biblioteca</a>. Para as leis que tratam desses temas,
+      veja <a href="/casos-e-leis/leis/">Leis e normas</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .sumario {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--linha);
+    margin-bottom: var(--s7);
+  }
+  .sumario li { border-bottom: 1px solid var(--linha); }
+  .sumario-secao + .principio { background-image: none; }
+  .sumario a { display: grid; gap: var(--s1); padding: var(--s4) var(--s4) var(--s4) 0; text-decoration: none; min-height: 100%; }
+  .s-nome { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
+  .s-frase { color: var(--suave); font-size: 0.9375rem; }
+  .sumario a:hover .s-nome { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+  .principio {
+    display: grid;
+    gap: var(--s5);
+    padding-block: var(--s8);
+    
+  }
+  @media (min-width: 960px) {
+    .principio { grid-template-columns: 340px minmax(0, 1fr); gap: var(--s8); }
+    .p-cabeca { position: sticky; top: 104px; align-self: start; }
+  }
+  .p-frase {
+    margin-top: var(--s4);
+    font-size: 1.1875rem;
+    font-weight: 500;
+    padding-left: var(--s4);
+    border-left: 3px solid var(--neon);
+    max-width: 28ch;
+  }
+  .p-lista { margin: var(--s5) 0 0; display: grid; gap: var(--s3); }
+  .p-lista div { display: grid; grid-template-columns: minmax(120px, 0.4fr) 1fr; gap: var(--s4); padding-bottom: var(--s3); border-bottom: 1px solid var(--linha); }
+  .p-lista dt { font-weight: 600; }
+  .p-lista dd { margin: 0; }
+  @media (max-width: 520px) { .p-lista div { grid-template-columns: 1fr; gap: var(--s1); } }
+  .p-corpo h3 { margin: var(--s6) 0 var(--s3); }
+  .pratica { list-style: none; padding: 0; display: grid; gap: var(--s3); }
+  .pratica li { padding-left: var(--s5); position: relative; }
+  .pratica li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 11px; height: 6px; border: 2.5px solid var(--neon); border-top: 0; border-right: 0; transform: rotate(-45deg); }
+  .p-rodape { display: grid; gap: var(--s5); margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid var(--linha); }
+  @media (min-width: 720px) { .p-rodape { grid-template-columns: 1fr 1fr; } }
+  .rotulo { font-weight: 600; margin-bottom: var(--s2); }
+</style>

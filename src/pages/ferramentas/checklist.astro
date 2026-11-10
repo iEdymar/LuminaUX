@@ -1,0 +1,211 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+import { checklists } from '../../data/ferramentas.js';
+import { getPadrao } from '../../data/padroes.js';
+---
+<Base titulo="Checklist de revisão ética" descricao="Revise uma tela com perguntas de sim ou não. Cada resposta negativa aponta o padrão enganoso e a ficha para corrigir.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/ferramentas/">Ferramentas</a></li>
+      <li aria-current="page">Checklist de revisão ética</li>
+    </ol>
+    <h1>Checklist de revisão ética</h1>
+    <p class="lead">
+      Responda olhando para a tela que você está desenhando. Cada “não” aponta um ponto de atenção e a ficha que
+      explica como corrigir.
+    </p>
+  </section>
+
+  <section class="wrap checklist-grade">
+    <div>
+      <div class="abas" role="tablist" aria-label="Tipo de revisão">
+        {checklists.map((c, i) => (
+          <button role="tab" type="button" id={`aba-${c.slug}`} aria-controls={`painel-${c.slug}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+            {c.nome}
+          </button>
+        ))}
+      </div>
+
+      {checklists.map((c, i) => (
+        <div role="tabpanel" id={`painel-${c.slug}`} aria-labelledby={`aba-${c.slug}`} hidden={i !== 0} class="painel" data-lista={c.nome}>
+          <p class="suave">{c.descricao}</p>
+          <ol class="itens">
+            {c.itens.map((item) => {
+              const f = getPadrao(item.ficha);
+              return (
+                <li id={item.id}>
+                  <fieldset data-ficha={item.ficha} data-nome={f.tecnico} data-pergunta={item.texto}>
+                    <legend>{item.texto}</legend>
+                    <div class="opcoes">
+                      <label><input type="radio" name={item.id} value="sim" /><span>Sim</span></label>
+                      <label><input type="radio" name={item.id} value="nao" /><span>Não</span></label>
+                      <label><input type="radio" name={item.id} value="na" /><span>Não se aplica</span></label>
+                    </div>
+                    <p class="se-nao" hidden>Ponto de atenção: <a href={`/padroes/${item.ficha}/`}>{f.tecnico}</a>. A ficha mostra como evitar.</p>
+                  </fieldset>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
+
+    <aside class="resumo" aria-labelledby="t-resumo">
+      <h2 id="t-resumo">Resultado</h2>
+      <p id="progresso" class="suave" aria-live="polite">Nenhuma pergunta respondida.</p>
+      <div id="pontos"></div>
+      <div class="resumo-acoes">
+        <button class="btn btn-primario btn-pequeno" type="button" id="copiar-registro">
+          <Icone nome="copiar" />
+          Copiar resultado da revisão
+        </button>
+        <button class="btn btn-secundario btn-pequeno" type="button" id="recomecar">Recomeçar</button>
+      </div>
+      <p class="suave pequeno">O resultado fica só no seu navegador e some ao recarregar a página.</p>
+    </aside>
+  </section>
+</Base>
+
+<style>
+  .checklist-grade { display: grid; gap: var(--s7); }
+  @media (min-width: 1040px) {
+    .checklist-grade { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--s8); }
+    .resumo { position: sticky; top: 104px; align-self: start; }
+  }
+  .abas { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+  .abas button {
+    min-height: 48px; padding: 0 var(--s5);
+    border-radius: 999px; border: 1.5px solid var(--linha-forte);
+    background: transparent; color: var(--branco);
+    font: inherit; font-weight: 600; cursor: pointer;
+  }
+  .abas button[aria-selected='true'] { background: var(--neon); color: var(--azul); border-color: var(--neon); }
+  .itens { list-style: none; padding: 0; margin-top: var(--s5); display: grid; border-top: 1px solid var(--linha); counter-reset: item; }
+  .itens > li { border-bottom: 1px solid var(--linha); counter-increment: item; scroll-margin-top: 96px; }
+  .itens > li:target fieldset { box-shadow: inset 4px 0 0 var(--neon); padding-left: var(--s4); }
+  fieldset { border: 0; margin: 0; padding: var(--s5) 0; display: grid; gap: var(--s4); }
+  legend { float: left; width: 100%; padding: 0; font-weight: 500; font-size: 1.0625rem; max-width: 60ch; }
+  legend::before { content: counter(item) '. '; font-family: var(--f-titulo); font-weight: 600; color: var(--neon); }
+  .opcoes { display: flex; flex-wrap: wrap; gap: var(--s2); clear: both; }
+  .opcoes label { position: relative; }
+  .opcoes input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+  .opcoes span {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s5);
+    border: 1.5px solid var(--linha-forte); border-radius: var(--r-ui); font-weight: 600; font-size: 0.9375rem;
+  }
+  .opcoes input:checked + span { background: var(--branco); color: var(--azul); border-color: var(--branco); }
+  .opcoes input[value='nao']:checked + span { background: var(--neon); border-color: var(--neon); }
+  .opcoes input:focus-visible + span { outline: 3px solid var(--neon); outline-offset: 3px; }
+  .se-nao { font-size: 0.9375rem; padding: var(--s3) var(--s4); background: var(--azul-fundo); border-radius: var(--r-ui); border-left: 3px solid var(--neon); }
+
+  .resumo { display: grid; gap: var(--s4); padding: var(--s5); border: 1.5px solid var(--linha-forte); border-radius: var(--r-tela); align-content: start; }
+  .resumo h2 { font-size: 1.5rem; }
+  .resumo-acoes { display: grid; gap: var(--s2); }
+  #pontos :global(ul) { list-style: none; padding: 0; display: grid; gap: var(--s2); }
+  #pontos :global(li) { display: flex; justify-content: space-between; gap: var(--s3); }
+  #pontos :global(.ok) { font-weight: 600; }
+</style>
+
+<script>
+  // Abas acessíveis (setas do teclado mudam de aba)
+  const abas = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+  function ativar(aba: HTMLButtonElement) {
+    abas.forEach((a) => {
+      const sel = a === aba;
+      a.setAttribute('aria-selected', String(sel));
+      a.tabIndex = sel ? 0 : -1;
+      const painel = document.getElementById(a.getAttribute('aria-controls') || '');
+      if (painel) painel.hidden = !sel;
+    });
+    atualizar();
+  }
+  abas.forEach((aba, i) => {
+    aba.addEventListener('click', () => ativar(aba));
+    aba.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const prox = abas[(i + (e.key === 'ArrowRight' ? 1 : -1) + abas.length) % abas.length];
+      ativar(prox);
+      prox.focus();
+    });
+  });
+
+
+  const painelAtivo = () => document.querySelector<HTMLElement>('[role="tabpanel"]:not([hidden])');
+  const progresso = document.getElementById('progresso');
+  const pontos = document.getElementById('pontos');
+
+  function atualizar() {
+    const painel = painelAtivo();
+    if (!painel || !progresso || !pontos) return;
+    const grupos = Array.from(painel.querySelectorAll<HTMLFieldSetElement>('fieldset'));
+    let respondidas = 0;
+    const atencao: Record<string, { nome: string; n: number }> = {};
+    grupos.forEach((g) => {
+      const marcado = g.querySelector<HTMLInputElement>('input:checked');
+      const aviso = g.querySelector<HTMLElement>('.se-nao');
+      if (marcado) respondidas++;
+      const nao = marcado?.value === 'nao';
+      if (aviso) aviso.hidden = !nao;
+      if (nao) {
+        const f = g.dataset.ficha || '';
+        atencao[f] = atencao[f] || { nome: g.dataset.nome || '', n: 0 };
+        atencao[f].n++;
+      }
+    });
+    const total = grupos.length;
+    const chaves = Object.keys(atencao);
+    progresso.textContent = respondidas === 0
+      ? 'Nenhuma pergunta respondida.'
+      : `${respondidas} de ${total} respondidas. ${chaves.length === 0 ? 'Nenhum ponto de atenção até agora.' : `${Object.values(atencao).reduce((s, a) => s + a.n, 0)} ponto(s) de atenção.`}`;
+    if (chaves.length) {
+      pontos.innerHTML = '<ul>' + chaves.map((k) => `<li><a href="/padroes/${k}/">${atencao[k].nome}</a><span>${atencao[k].n}</span></li>`).join('') + '</ul>';
+    } else if (respondidas === total && total > 0) {
+      pontos.innerHTML = '<p class="ok">Tudo certo nesta revisão.</p>';
+    } else {
+      pontos.innerHTML = '';
+    }
+  }
+
+  document.addEventListener('change', (e) => {
+    if ((e.target as HTMLElement).matches('.itens input')) atualizar();
+  });
+
+  document.getElementById('recomecar')?.addEventListener('click', () => {
+    painelAtivo()?.querySelectorAll<HTMLInputElement>('input').forEach((i) => (i.checked = false));
+    atualizar();
+  });
+
+  document.getElementById('copiar-registro')?.addEventListener('click', async () => {
+    const painel = painelAtivo();
+    if (!painel) return;
+    const data = new Date().toLocaleDateString('pt-BR');
+    const linhas = [`Revisão ética: ${painel.dataset.lista} (${data})`, ''];
+    painel.querySelectorAll<HTMLFieldSetElement>('fieldset').forEach((g, i) => {
+      const v = g.querySelector<HTMLInputElement>('input:checked')?.value;
+      const r = v === 'sim' ? 'Sim' : v === 'nao' ? `Não (ver ${g.dataset.nome})` : v === 'na' ? 'Não se aplica' : 'Sem resposta';
+      linhas.push(`${i + 1}. ${g.dataset.pergunta} ${r}`);
+    });
+    linhas.push('', `Gerado no ${document.body.dataset.site || 'hub'}.`);
+    try {
+      await navigator.clipboard.writeText(linhas.join('\n'));
+      window.dispatchEvent(new CustomEvent('aviso', { detail: 'Resultado copiado' }));
+    } catch {
+      window.dispatchEvent(new CustomEvent('aviso', { detail: 'Não foi possível copiar. Tente novamente.' }));
+    }
+  });
+
+  // Se a página abrir com #c1, #u3 etc., mostra a aba certa.
+  function abrirPeloHash() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const item = document.getElementById(hash);
+    const painel = item?.closest('[role="tabpanel"]');
+    const aba = painel ? document.querySelector<HTMLButtonElement>(`[aria-controls="${painel.id}"]`) : null;
+    if (aba) { ativar(aba); item?.scrollIntoView(); }
+  }
+  window.addEventListener('hashchange', abrirPeloHash);
+  abrirPeloHash();
+  atualizar();
+</script>

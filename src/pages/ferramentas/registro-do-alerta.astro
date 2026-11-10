@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+import { padroes } from '../../data/padroes.js';
+---
+<Base titulo="Registro do alerta" descricao="Um texto-modelo para registrar que o risco de um padrão enganoso foi apontado, quando a decisão final não é sua.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/ferramentas/">Ferramentas</a></li>
+      <li aria-current="page">Registro do alerta</li>
+    </ol>
+    <h1>Registro do alerta</h1>
+    <p class="lead">
+      Quando a decisão não é sua, registre por escrito que o risco foi apontado. O registro protege você, deixa um
+      histórico para a equipe e costuma tornar a próxima conversa mais fácil.
+    </p>
+  </section>
+
+  <section class="wrap registro">
+    <form class="registro-form" onsubmit="return false">
+      <div class="campo"><label for="r-tela">Tela ou fluxo</label><input id="r-tela" type="text" placeholder="Ex.: checkout do app" /></div>
+      <div class="campo">
+        <label for="r-padrao">Padrão identificado</label>
+        <select id="r-padrao">{padroes.map((p) => <option value={p.tecnico}>{p.tecnico}: {p.comum}</option>)}</select>
+      </div>
+      <div class="campo"><label for="r-risco">Risco apontado</label><textarea id="r-risco" placeholder="Ex.: CDC, art. 39, III: fornecer serviço sem solicitação prévia é prática abusiva."></textarea></div>
+      <div class="campo"><label for="r-alt">Alternativa sugerida</label><textarea id="r-alt" placeholder="Ex.: deixar o seguro desmarcado, com o preço ao lado."></textarea></div>
+      <div class="campo"><label for="r-decisao">Decisão tomada</label><input id="r-decisao" type="text" placeholder="Ex.: manter a versão atual até o fim da campanha" /></div>
+      <div class="campo"><label for="r-quem">Quem decidiu</label><input id="r-quem" type="text" placeholder="Ex.: gerente de produto" /></div>
+    </form>
+
+    <div class="registro-saida">
+      <div class="saida-topo">
+        <h2>Texto do registro</h2>
+        <button class="btn btn-primario btn-pequeno" type="button" data-copiar-de="texto-registro" data-aviso="Registro copiado">
+          <Icone nome="copiar" />
+          Copiar registro
+        </button>
+      </div>
+      <div class="saida-texto" id="texto-registro"></div>
+      <p class="suave pequeno">Cole no ticket, no e-mail ou na ata da reunião. Mantenha o tom factual: o objetivo é registrar, não acusar.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .registro { display: grid; gap: var(--s7); }
+  @media (min-width: 1040px) { .registro { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--s8); } .registro-saida { position: sticky; top: 104px; align-self: start; } }
+  .registro-form { display: grid; gap: var(--s5); align-content: start; }
+  .registro-saida { display: grid; gap: var(--s4); }
+  .saida-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s3); }
+  .saida-topo h2 { font-size: 1.5rem; }
+  .saida-texto { background: var(--branco); color: var(--azul); border-radius: var(--r-tela); padding: var(--s5) var(--s6); white-space: pre-line; line-height: 1.6; }
+</style>
+
+<script>
+  const campos = ['r-tela', 'r-padrao', 'r-risco', 'r-alt', 'r-decisao', 'r-quem'];
+  const valor = (id: string, padrao: string) => ((document.getElementById(id) as HTMLInputElement | null)?.value.trim() || padrao);
+  const saida = document.getElementById('texto-registro');
+  function montar() {
+    if (!saida) return;
+    const data = new Date().toLocaleDateString('pt-BR');
+    saida.textContent =
+`Registro de alerta de design (${data})
+
+Tela ou fluxo: ${valor('r-tela', '[tela]')}
+Padrão identificado: ${valor('r-padrao', '[padrão]')}
+Risco apontado: ${valor('r-risco', '[risco legal, de reputação ou financeiro]')}
+Alternativa sugerida: ${valor('r-alt', '[alternativa]')}
+Decisão tomada: ${valor('r-decisao', '[decisão]')}
+Quem decidiu: ${valor('r-quem', '[responsável]')}
+
+Registro feito para manter o histórico da decisão e permitir revisitá-la com dados.`;
+  }
+  campos.forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', montar);
+    document.getElementById(id)?.addEventListener('change', montar);
+  });
+  montar();
+</script>

@@ -1,0 +1,102 @@
+---
+// Par de telas "Como aparece" e "Como evitar" para as três fichas completas.
+// As marcações neon apontam onde olhar em cada versão.
+const { padrao, versao } = Astro.props;
+const errado = versao === 'errado';
+---
+<div class="tela inspecao">
+  {padrao === 'urgencia-falsa' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>loja.exemplo/oferta</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Fone Bluetooth Pro</p>
+        <div class="linha-preco"><span class="miudo"><s>R$ 499,90</s></span><strong>R$ 299,90</strong></div>
+        {errado ? (
+          <>
+            <div class="alvo aviso">Oferta termina em <span data-contador="598">09:58</span><span class="marcacao"><b>1</b>Contador que reinicia</span></div>
+            <div class="alvo">Só restam 2 unidades!<span class="marcacao"><b>2</b>Estoque sem base real</span></div>
+            <div class="alvo miudo">12 pessoas estão vendo agora<span class="marcacao"><b>3</b>Prova social sem contexto</span></div>
+            <span class="botao-tela">Comprar agora</span>
+          </>
+        ) : (
+          <>
+            <div class="alvo aviso">Preço promocional válido até 30/11<span class="marcacao"><b>1</b>Prazo real e fixo</span></div>
+            <div class="alvo">Em estoque<span class="marcacao"><b>2</b>Estoque verdadeiro</span></div>
+            <span class="botao-tela">Comprar</span>
+            <div class="alvo"><span class="botao-tela-sec">Salvar para depois</span><span class="marcacao"><b>3</b>Decidir sem pressa</span></div>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {padrao === 'pre-selecao' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>loja.exemplo/checkout</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Resumo do pedido</p>
+        <div class="linha-preco"><span>Fone Bluetooth Pro</span><span>R$ 299,90</span></div>
+        {errado ? (
+          <>
+            <div class="alvo caixa"><span class="quadrado marcado" aria-hidden="true"></span><span>Proteção estendida por 12 meses + R$ 49,90</span><span class="marcacao"><b>1</b>Adicional já marcado</span></div>
+            <div class="linha-preco total"><span>Total</span><span>R$ 349,80</span></div>
+            <div class="alvo"><span class="botao-tela">Pagar agora</span><span class="marcacao"><b>2</b>Valor sem destaque</span></div>
+          </>
+        ) : (
+          <>
+            <div class="alvo caixa"><span class="quadrado" aria-hidden="true"></span><span>Adicionar proteção estendida por 12 meses, <strong>R$ 49,90</strong>. Cobre defeitos depois da garantia de fábrica.</span><span class="marcacao"><b>1</b>Desmarcado, com preço</span></div>
+            <div class="linha-preco total"><span>Total</span><span>R$ 299,90</span></div>
+            <div class="alvo"><span class="botao-tela">Pagar R$ 299,90</span><span class="marcacao"><b>2</b>O botão diz o valor</span></div>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {padrao === 'custos-ocultos' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>banco.exemplo/credito</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Crédito pessoal</p>
+        {errado ? (
+          <>
+            <div class="alvo"><p style="font-size:1.5rem;font-weight:700;line-height:1.2">R$ 5.000 na sua conta hoje</p><p>em 12x de R$ 520</p><span class="marcacao"><b>1</b>Só a parcela em destaque</span></div>
+            <span class="botao-tela">Contratar agora</span>
+            <div class="alvo link-tela">Ver condições<span class="marcacao"><b>2</b>Total e juros escondidos</span></div>
+          </>
+        ) : (
+          <>
+            <div class="alvo" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><p class="miudo">Você recebe</p><p style="font-size:1.375rem;font-weight:700">R$ 5.000</p></div>
+              <div><p class="miudo">Você paga no total</p><p style="font-size:1.375rem;font-weight:700">R$ 6.240</p></div>
+              <span class="marcacao"><b>1</b>Recebe e paga, lado a lado</span>
+            </div>
+            <div class="alvo" style="display:grid;gap:4px">
+              <div class="linha-preco"><span>Parcelas</span><span>12x de R$ 520</span></div>
+              <div class="linha-preco"><span>Juros</span><span>3,5% ao mês</span></div>
+              <div class="linha-preco"><span>Custo Efetivo Total</span><span>52,9% ao ano</span></div>
+              <span class="marcacao"><b>2</b>Condições na mesma tela</span>
+            </div>
+            <span class="botao-tela">Contratar e receber R$ 5.000</span>
+          </>
+        )}
+      </div>
+    </>
+  )}
+</div>
+
+<style>
+  .tela { width: 100%; }
+  .tela .alvo { padding: 2px 0; }
+</style>
+
+<script>
+  document.querySelectorAll('.inspecao [data-contador]').forEach((el) => {
+    let resta = Number(el.getAttribute('data-contador')) || 600;
+    const f = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    setInterval(() => {
+      resta = resta <= 0 ? 600 : resta - 1;
+      el.textContent = f(resta);
+    }, 1000);
+  });
+</script>

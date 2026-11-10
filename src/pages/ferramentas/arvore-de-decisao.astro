@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import { arvore } from '../../data/ferramentas.js';
+import { padroes } from '../../data/padroes.js';
+const nomes = Object.fromEntries(padroes.map((p) => [p.slug, p.tecnico]));
+---
+<Base titulo="Árvore de decisão" descricao="Comece pelo que você vê na tela e descubra, em duas perguntas, se ela tem um padrão enganoso.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/ferramentas/">Ferramentas</a></li>
+      <li aria-current="page">Árvore de decisão</li>
+    </ol>
+    <h1>Árvore de decisão</h1>
+    <p class="lead">Não sabe o nome do que está vendo? Comece pelo que chamou sua atenção na tela.</p>
+  </section>
+
+  <section class="wrap arvore" aria-live="polite">
+    <div class="passo" id="passo-1">
+      <h2>{arvore.pergunta}</h2>
+      <ul class="escolhas">
+        {arvore.opcoes.map((o, i) => (
+          <li><button type="button" class="escolha" data-i={i}>{o.texto}</button></li>
+        ))}
+      </ul>
+      <p class="suave pequeno">Nenhuma descreve sua tela? Faça a <a href="/ferramentas/checklist/">revisão completa com o checklist</a>.</p>
+    </div>
+
+    {arvore.opcoes.map((o, i) => (
+      <div class="passo" id={`passo-2-${i}`} hidden>
+        <p class="suave">Você escolheu: {o.texto}</p>
+        <h2 tabindex="-1">{o.confirmar}</h2>
+        <div class="sim-nao">
+          <button type="button" class="btn btn-secundario" data-resultado={`r-${i}-sim`}>Sim</button>
+          <button type="button" class="btn btn-secundario" data-resultado={`r-${i}-nao`}>Não</button>
+        </div>
+        <button type="button" class="voltar" data-voltar>Voltar para a primeira pergunta</button>
+      </div>
+    ))}
+
+    {arvore.opcoes.map((o, i) => (
+      (['sim', 'nao'] as const).map((r) => {
+        const res = r === 'sim' ? o.sim : o.nao;
+        return (
+          <div class="passo resultado" id={`r-${i}-${r}`} hidden>
+            <h2 tabindex="-1">{res.ficha ? `Provável padrão: ${nomes[res.ficha]}` : 'Provavelmente não é um padrão enganoso'}</h2>
+            <p class="leitura">{res.texto}</p>
+            <div class="acoes">
+              {res.ficha ? (
+                <>
+                  <a class="btn btn-primario" href={`/padroes/${res.ficha}/`}>Abrir a ficha</a>
+                  <a class="btn btn-secundario" href={`/ferramentas/kit-de-argumentacao/?padrao=${res.ficha}`}>Montar um argumento</a>
+                </>
+              ) : (
+                <a class="btn btn-primario" href="/ferramentas/checklist/">Revisar o restante da tela</a>
+              )}
+            </div>
+            <button type="button" class="voltar" data-voltar>Começar de novo</button>
+          </div>
+        );
+      })
+    ))}
+  </section>
+</Base>
+
+<style>
+  .arvore { max-width: 820px; }
+  .passo { display: grid; gap: var(--s5); }
+  .escolhas { list-style: none; padding: 0; display: grid; gap: var(--s2); }
+  .escolha {
+    width: 100%; text-align: left; min-height: 56px; padding: var(--s4) var(--s5);
+    background: transparent; color: var(--branco); font: inherit; font-size: 1.0625rem;
+    border: 1.5px solid var(--linha-forte); border-radius: var(--r-ui); cursor: pointer;
+  }
+  .escolha:hover { border-color: var(--neon); background: var(--azul-fundo); }
+  .sim-nao { display: flex; gap: var(--s3); }
+  .sim-nao .btn { min-width: 120px; }
+  .acoes { display: flex; flex-wrap: wrap; gap: var(--s3); }
+  .voltar {
+    justify-self: start; min-height: 44px; padding: 0; background: none; border: 0; color: var(--branco);
+    font: inherit; font-weight: 600; cursor: pointer;
+    text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 2px; text-underline-offset: 4px;
+  }
+  .resultado h2 { max-width: 22ch; }
+</style>
+
+<script>
+  const passos = Array.from(document.querySelectorAll<HTMLElement>('.passo'));
+  function mostrar(id: string) {
+    passos.forEach((p) => (p.hidden = p.id !== id));
+    const alvo = document.getElementById(id)?.querySelector<HTMLElement>('h2');
+    alvo?.focus();
+  }
+  document.querySelectorAll<HTMLButtonElement>('.escolha').forEach((b) => b.addEventListener('click', () => mostrar(`passo-2-${b.dataset.i}`)));
+  document.querySelectorAll<HTMLButtonElement>('[data-resultado]').forEach((b) => b.addEventListener('click', () => mostrar(b.dataset.resultado || '')));
+  document.querySelectorAll<HTMLButtonElement>('[data-voltar]').forEach((b) => b.addEventListener('click', () => {
+    mostrar('passo-1');
+    document.querySelector<HTMLButtonElement>('.escolha')?.focus();
+  }));
+</script>

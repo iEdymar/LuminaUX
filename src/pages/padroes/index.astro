@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+import { padroes, categorias } from '../../data/padroes.js';
+
+const total = 25;
+// Texto usado pela busca: nomes, resumo, sinais e palavras do dia a dia.
+const indice = (p: (typeof padroes)[number]) => [p.tecnico, p.tecnicoAntigo || '', p.comum, p.resumo, p.categoria, ...p.sinais, ...p.palavras].join(' ');
+---
+<Base titulo="Acervo de padrões" descricao="Os sete padrões enganosos mais vistos por profissionais de design, com sinais, exemplos e alternativas éticas.">
+  <section class="wrap cabecalho-pagina">
+    <h1>Acervo de padrões</h1>
+    <p class="lead">
+      Sete padrões enganosos, escolhidos a partir do que 25 profissionais de design já viram e de casos de empresas
+      punidas. Busque pelo que a tela faz, sem precisar saber o nome técnico.
+    </p>
+    <p class="suave" style="margin-top: var(--s4)">
+      Primeira vez por aqui? Comece por <a href="/padroes/o-que-sao/">o que são padrões enganosos</a>.
+    </p>
+  </section>
+
+  <section class="wrap" id="busca">
+    <form class="filtros" role="search" onsubmit="return false">
+      <div class="campo campo-busca">
+        <label for="q">O que a sua tela faz?</label>
+        <div class="busca-caixa">
+          <Icone nome="busca" />
+          <input id="q" name="q" type="search" placeholder="Ex.: contador, seguro marcado, taxa, cancelar" autocomplete="off" />
+        </div>
+      </div>
+      <fieldset class="categorias">
+        <legend>Categoria</legend>
+        <label><input type="radio" name="cat" value="" checked /><span>Todas</span></label>
+        {categorias.map((c) => (
+          <label><input type="radio" name="cat" value={c} /><span>{c}</span></label>
+        ))}
+      </fieldset>
+    </form>
+
+    <p class="contagem suave" aria-live="polite" id="contagem">{padroes.length} padrões</p>
+
+    <ul class="linhas indice" id="indice">
+      {padroes.map((p) => (
+        <li data-indice={indice(p)} data-categoria={p.categoria}>
+          <a href={`/padroes/${p.slug}/`} class="item">
+            <span class="item-nomes">
+              <span class="item-tecnico">{p.tecnico}</span>
+              <span class="item-comum">{p.comum}</span>
+            </span>
+            <span class="item-resumo">{p.resumo}</span>
+            <span class="item-meta">
+              <span>{p.categoria}</span>
+              <span>{p.questionario ? `Visto por ${p.questionario} de ${total} profissionais` : 'Presente nos casos reais'}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="vazio" id="vazio" hidden>
+      <p><strong>Nenhum padrão encontrado.</strong></p>
+      <p class="suave">Tente descrever o que a tela faz, como “contador”, “caixa marcada”, “taxa” ou “cancelar”. Se a dúvida continuar, use a <a href="/ferramentas/arvore-de-decisao/">árvore de decisão</a>.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filtros { display: grid; gap: var(--s5); margin-bottom: var(--s5); }
+  @media (min-width: 900px) { .filtros { grid-template-columns: minmax(0, 1fr) auto; align-items: end; } }
+  .campo-busca label { font-family: var(--f-titulo); font-size: 1.125rem; }
+  .busca-caixa { position: relative; }
+  .busca-caixa :global(svg) { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 20px; height: 20px; color: var(--azul); pointer-events: none; }
+  .busca-caixa input { padding-left: 48px; min-height: 56px; font-size: 1.0625rem; }
+
+  .categorias { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+  .categorias legend { font-weight: 600; font-size: 0.9375rem; margin-bottom: var(--s2); padding: 0; }
+  .categorias label { position: relative; }
+  .categorias input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .categorias span {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s4);
+    border: 1.5px solid var(--linha-forte); border-radius: 999px; font-size: 0.9375rem; font-weight: 500;
+  }
+  .categorias input:checked + span { background: var(--neon); color: var(--azul); border-color: var(--neon); }
+  .categorias input:focus-visible + span { outline: 3px solid var(--neon); outline-offset: 3px; }
+
+  .contagem { margin-bottom: var(--s3); font-size: 0.9375rem; }
+  .item {
+    display: grid;
+    gap: var(--s3) var(--s6);
+    padding-block: var(--s5);
+    text-decoration: none;
+  }
+  @media (min-width: 900px) {
+    .item { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 0.6fr); align-items: start; }
+  }
+  .item-nomes { display: grid; gap: var(--s1); }
+  .item-tecnico { font-family: var(--f-titulo); font-weight: 600; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; }
+  .item-comum { color: var(--suave); }
+  .item-resumo { max-width: 56ch; }
+  .item-meta { display: grid; gap: var(--s1); font-size: 0.875rem; color: var(--suave); }
+  .item:hover .item-tecnico { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .vazio { padding: var(--s6) 0; display: grid; gap: var(--s2); max-width: 60ch; }
+</style>
+
+<script>
+  const normalizar = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const campo = document.getElementById('q') as HTMLInputElement | null;
+  const itens = Array.from(document.querySelectorAll<HTMLLIElement>('#indice > li'));
+  const contagem = document.getElementById('contagem');
+  const vazio = document.getElementById('vazio');
+  const lista = document.getElementById('indice');
+  const indices = itens.map((li) => normalizar(li.dataset.indice || ''));
+  // Palavras muito comuns que não ajudam a encontrar um padrão.
+  const vazias = new Set(['de', 'da', 'do', 'das', 'dos', 'no', 'na', 'nos', 'nas', 'em', 'um', 'uma', 'que', 'com', 'por', 'para', 'os', 'as', 'se', 'ao', 'tela', 'minha', 'meu', 'muito', 'mais', 'ja', 'esta', 'tem', 'pode']);
+
+  function filtrar() {
+    const termos = normalizar(campo?.value || '').split(/[\s,.;]+/).filter((t) => t.length > 1 && !vazias.has(t));
+    const cat = (document.querySelector('input[name="cat"]:checked') as HTMLInputElement | null)?.value || '';
+    let visiveis = 0;
+    const pontuados: { li: HTMLLIElement; p: number }[] = [];
+    itens.forEach((li, i) => {
+      const okCat = !cat || li.dataset.categoria === cat;
+      const p = termos.length ? termos.reduce((s, t) => s + (indices[i].includes(t) ? 1 : 0), 0) : 1;
+      const mostrar = okCat && p > 0;
+      li.hidden = !mostrar;
+      if (mostrar) { visiveis++; pontuados.push({ li, p }); }
+    });
+    // Os resultados com mais termos encontrados aparecem primeiro.
+    pontuados.sort((a, b) => b.p - a.p).forEach(({ li }) => lista?.appendChild(li));
+    if (contagem) contagem.textContent = visiveis === 1 ? '1 padrão' : `${visiveis} padrões`;
+    if (vazio) vazio.hidden = visiveis > 0;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (campo && params.get('q')) campo.value = params.get('q') || '';
+  campo?.addEventListener('input', filtrar);
+  document.querySelectorAll('input[name="cat"]').forEach((r) => r.addEventListener('change', filtrar));
+  filtrar();
+</script>

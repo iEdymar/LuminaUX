@@ -1,0 +1,47 @@
+---
+import { site, nav } from '../data/site.js';
+---
+<footer class="rodape">
+  <div class="wrap rodape-grade">
+    <div>
+      <p class="rodape-nome">{site.nome}</p>
+      <p class="suave pequeno">{site.descricao}</p>
+    </div>
+    <nav aria-label="Rodapé">
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href="/sobre/">Sobre o hub</a></li>
+      </ul>
+    </nav>
+    <div class="pequeno suave rodape-nota">
+      <p>Conteúdo informativo, baseado em pesquisa acadêmica. Não substitui orientação jurídica.</p>
+      <p>Trabalho de conclusão de curso de {site.autor}, {site.curso}. Atualizado em {site.atualizado}.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rodape {
+    background: var(--azul-fundo);
+    margin-top: var(--s9);
+    padding-block: var(--s7);
+  }
+  .rodape-grade {
+    display: grid;
+    gap: var(--s6);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 900px) {
+    .rodape-grade { grid-template-columns: 1.2fr 1fr 1.2fr; }
+  }
+  .rodape-nome {
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: var(--s2);
+  }
+  .rodape ul { list-style: none; padding: 0; display: grid; gap: var(--s1); }
+  .rodape li a { display: inline-flex; min-height: 36px; align-items: center; text-decoration: none; }
+  .rodape li a:hover { text-decoration: underline; text-decoration-color: var(--neon); }
+  .rodape-nota { display: grid; gap: var(--s3); }
+</style>

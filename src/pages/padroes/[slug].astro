@@ -1,0 +1,221 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+import TelaFicha from '../../components/TelaFicha.astro';
+import { padroes } from '../../data/padroes.js';
+import { getPrincipio } from '../../data/principios.js';
+import { getCaso } from '../../data/casos.js';
+import { getLei } from '../../data/leis.js';
+import { site } from '../../data/site.js';
+
+export function getStaticPaths() {
+  return padroes.map((p, i) => ({
+    params: { slug: p.slug },
+    props: { p, anterior: padroes[i - 1], proximo: padroes[i + 1] },
+  }));
+}
+
+const { p, anterior, proximo } = Astro.props;
+const principios = p.principios.map(getPrincipio);
+const casos = p.casos.map(getCaso);
+const secoes = [
+  ['o-que-e', 'O que é'],
+  ['como-identificar', 'Como identificar'],
+  ['exemplo', p.completa ? 'Como aparece e como evitar' : 'Exemplo e como evitar'],
+  ['por-que-funciona', 'Por que funciona'],
+  ['como-amenizar', 'Quando a gestão diz não'],
+  ['relacionados', 'Relacionados'],
+];
+---
+<Base titulo={p.tecnico} descricao={`${p.comum}. ${p.resumo}`}>
+  <article>
+    <header class="wrap cabecalho-pagina ficha-topo">
+      <ol class="trilha">
+        <li><a href="/padroes/">Acervo de padrões</a></li>
+        <li aria-current="page">{p.tecnico}</li>
+      </ol>
+      <h1>{p.tecnico}</h1>
+      {p.tecnicoAntigo && <p class="nome-antigo suave">Nome antigo: {p.tecnicoAntigo}</p>}
+      <p class="ficha-comum">{p.comum}</p>
+      <dl class="ficha-meta">
+        <div><dt>Categoria</dt><dd>{p.categoria}</dd></div>
+        <div>
+          <dt>No questionário</dt>
+          <dd>{p.questionario ? `Visto por ${p.questionario} de 25 profissionais` : <span class="suave">{p.questionarioNota}</span>}{p.questionario && p.questionarioNota && <span class="suave"> {p.questionarioNota}</span>}</dd>
+        </div>
+      </dl>
+      <button class="btn btn-secundario btn-pequeno" type="button" data-copiar-link>
+        <Icone nome="link" />
+        Copiar link da ficha
+      </button>
+    </header>
+
+    <div class="wrap ficha-grade">
+      <nav class="ficha-indice" aria-label="Nesta ficha">
+        <p class="suave pequeno">Nesta ficha</p>
+        <ul>
+          {secoes.map(([id, nome]) => <li><a href={`#${id}`}>{nome}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="ficha-conteudo">
+        <section id="o-que-e" class="bloco">
+          <h2>O que é</h2>
+          <p class="lead">{p.resumo}</p>
+        </section>
+
+        <section id="como-identificar" class="bloco">
+          <h2>Como identificar</h2>
+          <ul class="sinais">
+            {p.sinais.map((s) => <li>{s}</li>)}
+          </ul>
+        </section>
+
+        <section id="exemplo" class="bloco">
+          <h2>{p.completa ? 'Como aparece e como evitar' : 'Exemplo e como evitar'}</h2>
+          {p.completa ? (
+            <>
+              <p class="suave leitura">Telas fictícias. As marcações apontam onde olhar em cada versão.</p>
+              <div class="comparacao">
+                <figure>
+                  <figcaption>Como aparece</figcaption>
+                  <TelaFicha padrao={p.slug} versao="errado" />
+                </figure>
+                <figure>
+                  <figcaption>Como evitar</figcaption>
+                  <TelaFicha padrao={p.slug} versao="certo" />
+                </figure>
+              </div>
+              <p class="leitura exemplo-real"><strong>Na prática:</strong> {p.exemplo}</p>
+            </>
+          ) : (
+            <p class="leitura exemplo-real">{p.exemplo}</p>
+          )}
+          <h3>Como evitar</h3>
+          <ul class="evitar">
+            {p.evitar.map((e) => <li>{e}</li>)}
+          </ul>
+        </section>
+
+        <section id="por-que-funciona" class="bloco">
+          <h2>Por que funciona</h2>
+          <p class="leitura">{p.porque}</p>
+        </section>
+
+        <section id="como-amenizar" class="bloco">
+          <h2>Quando a gestão diz não</h2>
+          <p class="suave leitura">Nem sempre dá para evitar o padrão. Estas mudanças reduzem o dano ao usuário.</p>
+          <ul class="sinais">
+            {p.amenizar.map((a) => <li>{a}</li>)}
+          </ul>
+          <p class="leitura" style="margin-top: var(--s4)">
+            Registre o alerta com o <a href="/ferramentas/registro-do-alerta/">modelo de registro</a>.
+          </p>
+        </section>
+
+        <section id="relacionados" class="bloco">
+          <h2>Relacionados</h2>
+          <div class="relacionados">
+            <div>
+              <h3>Princípios que este padrão viola</h3>
+              <ul class="etiquetas">
+                {principios.map((pr) => <li><a class="etiqueta" href={`/design-etico/#${pr.slug}`}>{pr.nome}</a></li>)}
+              </ul>
+            </div>
+            <div>
+              <h3>Casos reais</h3>
+              <ul class="lista-simples">
+                {casos.map((c) => (
+                  <li><a href={`/casos-e-leis/#${c.slug}`}>{c.empresa} ({c.periodo})</a><span class="suave pequeno">{c.penalidadeCurta}</span></li>
+                ))}
+              </ul>
+            </div>
+            <div class="rel-largo">
+              <h3>O que diz a lei</h3>
+              <ul class="leis-lista">
+                {p.leis.map((l) => {
+                  const lei = getLei(l.lei);
+                  return (
+                    <li>
+                      <a href={`/casos-e-leis/leis/#${l.lei}`}>{lei.sigla}, {l.artigo}</a>
+                      <span>{l.texto}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p class="suave pequeno">Resumo informativo. Confira o texto oficial e, em caso de dúvida, consulte o jurídico.</p>
+            </div>
+            <div class="rel-largo acoes">
+              <a class="btn btn-primario" href={`/ferramentas/kit-de-argumentacao/?padrao=${p.slug}`}>Montar um argumento sobre este padrão</a>
+              <a class="btn btn-secundario" href={`/ferramentas/checklist/#${p.checklist}`}>Ver no checklist</a>
+            </div>
+          </div>
+        </section>
+
+        <footer class="bloco fontes">
+          <p class="suave pequeno">Fontes: {p.fontes.join('; ')}. Referências completas na <a href="/biblioteca/">Biblioteca</a>. Atualizado em {site.atualizado}.</p>
+        </footer>
+
+        <nav class="vizinhos" aria-label="Outras fichas">
+          {anterior ? <a href={`/padroes/${anterior.slug}/`}><span class="suave pequeno">Ficha anterior</span><span>{anterior.tecnico}</span></a> : <span></span>}
+          {proximo && <a class="prox" href={`/padroes/${proximo.slug}/`}><span class="suave pequeno">Próxima ficha</span><span>{proximo.tecnico}</span></a>}
+        </nav>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .ficha-topo h1 { max-width: 16ch; }
+  .nome-antigo { margin-top: var(--s2); }
+  .ficha-comum { margin-top: var(--s4); font-size: clamp(1.2rem, 1rem + 0.8vw, 1.5rem); font-weight: 500; max-width: 40ch; }
+  .ficha-meta { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); margin: var(--s6) 0 var(--s5); }
+  .ficha-meta dt { font-size: 0.875rem; color: var(--suave); }
+  .ficha-meta dd { margin: 0; font-weight: 600; }
+  .ficha-meta dd .suave { font-weight: 400; }
+
+  .ficha-grade { display: grid; gap: var(--s6); }
+  @media (min-width: 1040px) {
+    .ficha-grade { grid-template-columns: 220px minmax(0, 1fr); gap: var(--s8); }
+  }
+  .ficha-indice { display: none; }
+  @media (min-width: 1040px) {
+    .ficha-indice { display: block; position: sticky; top: 104px; align-self: start; }
+  }
+  .ficha-indice ul { list-style: none; padding: 0; margin-top: var(--s2); display: grid; gap: var(--s1); border-left: 2px solid var(--linha); }
+  .ficha-indice a { display: block; padding: var(--s2) var(--s4); text-decoration: none; font-size: 0.9375rem; }
+  .ficha-indice a:hover { color: var(--neon); }
+
+  .bloco { padding-block: var(--s7); border-top: 1px solid var(--linha); }
+  .bloco:first-child { border-top: 0; padding-top: 0; }
+  .bloco h2 { margin-bottom: var(--s5); }
+  .bloco h3 { margin: var(--s6) 0 var(--s3); }
+
+  .sinais, .evitar { list-style: none; padding: 0; display: grid; gap: var(--s3); max-width: var(--leitura); }
+  .sinais li { padding-left: var(--s5); position: relative; }
+  .sinais li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 10px; height: 10px; border: 2px solid var(--neon); border-radius: 2px; }
+  .evitar li { padding-left: var(--s5); position: relative; }
+  .evitar li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 11px; height: 6px; border: 2.5px solid var(--neon); border-top: 0; border-right: 0; transform: rotate(-45deg); }
+
+  .comparacao { display: grid; gap: var(--s6); margin-top: var(--s5); }
+  @media (min-width: 760px) { .comparacao { grid-template-columns: 1fr 1fr; } }
+  .comparacao figure { margin: 0; display: grid; gap: var(--s3); align-content: start; }
+  .comparacao figcaption { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
+  .exemplo-real { margin-top: var(--s5); }
+
+  .relacionados { display: grid; gap: var(--s6); }
+  @media (min-width: 760px) { .relacionados { grid-template-columns: 1fr 1fr; } .rel-largo { grid-column: 1 / -1; } }
+  .relacionados h3 { margin: 0 0 var(--s3); font-size: 1.125rem; }
+  .lista-simples { list-style: none; padding: 0; display: grid; gap: var(--s3); }
+  .lista-simples li { display: grid; gap: 2px; }
+  .leis-lista { list-style: none; padding: 0; display: grid; gap: var(--s3); margin-bottom: var(--s3); }
+  .leis-lista li { display: grid; gap: 2px; }
+  .leis-lista a { font-weight: 600; }
+  .acoes { display: flex; flex-wrap: wrap; gap: var(--s3); }
+
+  .fontes { padding-block: var(--s5); }
+  .vizinhos { display: flex; justify-content: space-between; gap: var(--s4); border-top: 1px solid var(--linha); padding-top: var(--s5); }
+  .vizinhos a { display: grid; gap: 2px; text-decoration: none; font-family: var(--f-titulo); font-weight: 600; min-height: 44px; }
+  .vizinhos a:hover span:last-child { text-decoration: underline; text-decoration-color: var(--neon); }
+  .vizinhos .prox { text-align: right; margin-left: auto; }
+</style>

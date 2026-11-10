@@ -1,0 +1,80 @@
+---
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+import { site } from '../data/site.js';
+
+const { titulo, descricao = site.descricao } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${site.nome}` : `${site.nome}: persuadir sem manipular`;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descricao} />
+    <meta name="theme-color" content="#0131CD" />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body data-site={site.nome}>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    <Cabecalho />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Rodape />
+    <div class="aviso-copia" role="status" aria-live="polite" id="aviso-copia"></div>
+    <script>
+      // Copiar texto ou link (botões com data-copiar ou data-copiar-link)
+      const aviso = document.getElementById('aviso-copia');
+      let tempo: ReturnType<typeof setTimeout> | undefined;
+      function avisar(msg: string) {
+        if (!aviso) return;
+        aviso.textContent = msg;
+        aviso.classList.add('visivel');
+        clearTimeout(tempo);
+        tempo = setTimeout(() => aviso.classList.remove('visivel'), 2200);
+      }
+      // Outros scripts podem disparar: window.dispatchEvent(new CustomEvent('aviso', { detail: 'Mensagem' }))
+      window.addEventListener('aviso', (e) => avisar((e as CustomEvent<string>).detail));
+      async function copiar(texto: string) {
+        try {
+          await navigator.clipboard.writeText(texto);
+          return true;
+        } catch {
+          const area = document.createElement('textarea');
+          area.value = texto;
+          document.body.appendChild(area);
+          area.select();
+          const ok = document.execCommand('copy');
+          area.remove();
+          return ok;
+        }
+      }
+      document.addEventListener('click', async (e) => {
+        const alvo = e.target instanceof Element ? e.target.closest('[data-copiar-link],[data-copiar-de]') : null;
+        if (!alvo) return;
+        let texto = '';
+        let msg = 'Copiado';
+        if (alvo.hasAttribute('data-copiar-link')) {
+          texto = window.location.href.split('#')[0];
+          msg = 'Link da ficha copiado';
+        } else {
+          const origem = document.getElementById(alvo.getAttribute('data-copiar-de') || '');
+          texto = origem ? origem.innerText.trim() : '';
+          msg = alvo.getAttribute('data-aviso') || 'Texto copiado';
+        }
+        if (!texto) return;
+        const ok = await copiar(texto);
+        avisar(ok ? msg : 'Não foi possível copiar. Selecione o texto e copie manualmente.');
+      });
+    </script>
+  </body>
+</html>

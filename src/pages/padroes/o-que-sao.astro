@@ -1,0 +1,141 @@
+---
+import Base from '../../layouts/Base.astro';
+import { padroes } from '../../data/padroes.js';
+
+const vieses = [
+  { nome: 'Aversão à perda', texto: 'Perder pesa mais do que ganhar a mesma coisa. Por isso “a oferta vai acabar” funciona tão bem.', ficha: 'urgencia-falsa' },
+  { nome: 'Efeito padrão', texto: 'Tendemos a manter o que já vem selecionado, por inércia ou por achar que é o recomendado.', ficha: 'pre-selecao' },
+  { nome: 'Ancoragem e custo afundado', texto: 'O primeiro preço vira referência, e quem já investiu tempo no fluxo resiste a desistir.', ficha: 'custos-ocultos' },
+  { nome: 'Atrito', texto: 'Cada passo a mais faz parte das pessoas desistir. Quando o atrito está só na saída, ele prende.', ficha: 'dificil-cancelar' },
+  { nome: 'Atenção seletiva', texto: 'Lemos primeiro o que a hierarquia visual destaca. O que está apagado quase não é visto.', ficha: 'misdirection' },
+];
+
+const categorias = [
+  { nome: 'Interferência na interface', texto: 'O visual ou o texto favorece uma opção em detrimento de outra.' },
+  { nome: 'Ocultação', texto: 'Informações relevantes são escondidas ou adiadas.' },
+  { nome: 'Obstrução', texto: 'Uma tarefa fica mais difícil do que precisa ser.' },
+  { nome: 'Ação forçada', texto: 'O usuário precisa fazer algo a mais para conseguir o que quer.' },
+  { nome: 'Insistência', texto: 'Pedidos repetidos que interrompem a tarefa até a pessoa ceder.' },
+];
+const fichasPor = (cat: string) => padroes.filter((p) => p.categoria === cat);
+---
+<Base titulo="O que são padrões enganosos" descricao="Uma introdução em linguagem simples: o que são padrões enganosos, a diferença entre persuadir e manipular e por que eles funcionam.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/padroes/">Acervo de padrões</a></li>
+      <li aria-current="page">O que são</li>
+    </ol>
+    <h1>O que são padrões enganosos</h1>
+    <p class="lead">
+      São escolhas de interface que levam a pessoa a fazer algo que ela não faria se estivesse bem informada, em
+      benefício de quem criou a interface. Podem estar num botão, num texto, numa opção que já vem marcada ou na
+      ordem das telas.
+    </p>
+  </section>
+
+  <section class="wrap secao">
+    <div class="duas-colunas">
+      <h2>Persuadir ou manipular?</h2>
+      <div class="prosa leitura">
+        <p>
+          Toda interface influencia decisões: alguma opção sempre aparece primeiro, algum botão sempre tem mais
+          destaque. Influenciar não é o problema. O problema é influenciar contra o interesse de quem decide, ou de um
+          jeito que a pessoa não percebe.
+        </p>
+        <p>Richard Thaler, um dos autores de <em>Nudge</em>, propõe três perguntas para separar as duas coisas:</p>
+        <ol class="perguntas">
+          <li><strong>É transparente?</strong> A influência é visível e nunca engana.</li>
+          <li><strong>É fácil recusar?</strong> Dizer não leva, de preferência, um clique.</li>
+          <li><strong>Ajuda quem decide?</strong> Há bons motivos para acreditar que a pessoa fica melhor com essa escolha.</li>
+        </ol>
+        <p>Se a resposta para qualquer uma for “não”, a tela provavelmente cruzou a linha.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap secao">
+    <div class="duas-colunas">
+      <h2>Por que eles funcionam</h2>
+      <div class="leitura">
+        <p class="prosa">
+          Daniel Kahneman descreve dois modos de pensar: um rápido e automático (o Sistema 1) e outro lento e
+          deliberado (o Sistema 2). Padrões enganosos tentam manter a decisão no modo rápido, explorando atalhos que
+          todos nós usamos.
+        </p>
+        <dl class="vieses">
+          {vieses.map((v) => (
+            <div>
+              <dt>{v.nome}</dt>
+              <dd>{v.texto} <a href={`/padroes/${v.ficha}/`}>Ver um padrão que usa isso</a></dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap secao">
+    <div class="duas-colunas">
+      <h2>As cinco estratégias</h2>
+      <div class="leitura">
+        <p class="prosa">
+          Gray e colegas (2018) organizaram os padrões em cinco estratégias. O acervo do hub usa essas categorias para
+          agrupar as fichas.
+        </p>
+        <ul class="linhas cats">
+          {categorias.map((c) => (
+            <li>
+              <h3>{c.nome}</h3>
+              <p class="suave">{c.texto}</p>
+              {fichasPor(c.nome).length > 0 && (
+                <ul class="etiquetas">
+                  {fichasPor(c.nome).map((f) => <li><a class="etiqueta" href={`/padroes/${f.slug}/`}>{f.tecnico}</a></li>)}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap secao">
+    <div class="duas-colunas">
+      <h2>Dark ou deceptive?</h2>
+      <div class="prosa leitura">
+        <p>
+          O termo <em>dark patterns</em> foi criado por Harry Brignull em 2010. Em 2023, ele passou a usar
+          <em>deceptive patterns</em> (padrões enganosos), que descreve melhor o problema. Os dois aparecem na
+          literatura e significam a mesma coisa.
+        </p>
+        <p>
+          Alguns padrões também mudaram de nome: Roach Motel, por exemplo, hoje é Hard to Cancel. Nas fichas, o nome
+          atual vem primeiro e o antigo aparece logo abaixo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap secao proximo">
+    <h2>E agora?</h2>
+    <div class="acoes">
+      <a class="btn btn-primario" href="/padroes/">Explorar o acervo</a>
+      <a class="btn btn-secundario" href="/ferramentas/checklist/">Revisar uma tela</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .duas-colunas { display: grid; gap: var(--s5); }
+  @media (min-width: 960px) { .duas-colunas { grid-template-columns: 320px minmax(0, 1fr); gap: var(--s8); } }
+  .perguntas { padding-left: 1.4em; display: grid; gap: var(--s3); }
+  .perguntas li::marker { color: var(--neon); font-weight: 700; font-family: var(--f-titulo); }
+  .vieses { margin: var(--s5) 0 0; display: grid; gap: var(--s5); }
+  .vieses dt { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
+  .vieses dd { margin: var(--s1) 0 0; }
+  .cats { margin-top: var(--s5); }
+  .cats > li { padding-block: var(--s5); display: grid; gap: var(--s2); }
+  .cats h3 { font-size: 1.25rem; }
+  .cats .etiquetas { margin-top: var(--s2); }
+  .proximo .acoes { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
+</style>

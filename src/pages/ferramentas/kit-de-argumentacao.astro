@@ -1,0 +1,169 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+import { padroes } from '../../data/padroes.js';
+import { getCaso } from '../../data/casos.js';
+import { getLei } from '../../data/leis.js';
+
+// Dados que o formulário usa para montar o argumento.
+const dados = Object.fromEntries(
+  padroes.map((p) => {
+    const caso = getCaso(p.casos[0]);
+    const lei = p.leis[0];
+    return [
+      p.slug,
+      {
+        tecnico: p.tecnico,
+        comum: p.comum,
+        resumo: p.resumo,
+        alternativa: p.evitar[0],
+        lei: `${getLei(lei.lei).sigla}, ${lei.artigo}: ${lei.texto}`,
+        caso: `${caso.empresa} (${caso.periodo}): ${caso.resumo} Consequência: ${caso.penalidadeCurta}.`,
+        questionario: p.questionario,
+      },
+    ];
+  }),
+);
+
+const metricas = [['a taxa de conversão', 'Taxa de conversão'], ['os pedidos de cancelamento', 'Pedidos de cancelamento'], ['as reclamações no SAC e no Reclame Aqui', 'Reclamações no SAC e no Reclame Aqui'], ['os pedidos de reembolso e estorno', 'Pedidos de reembolso e estorno'], ['as avaliações na loja de apps', 'Avaliações na loja de apps']];
+const prazos = ['duas semanas', 'um mês', 'um trimestre'];
+const passos = [
+  ['Problema', 'O que está errado na tela, em uma frase.'],
+  ['Risco', 'O que a empresa arrisca: lei, reputação e dinheiro.'],
+  ['Alternativa', 'Como chegar ao mesmo objetivo sem manipular.'],
+  ['Como medir', 'O número que vai mostrar se a alternativa funcionou.'],
+];
+---
+<Base titulo="Kit de argumentação" descricao="Monte um argumento para a gestão com problema, risco legal, caso real, alternativa ética e métrica, pronto para copiar.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/ferramentas/">Ferramentas</a></li>
+      <li aria-current="page">Kit de argumentação</li>
+    </ol>
+    <h1>Kit de argumentação</h1>
+    <p class="lead">
+      “Isso é antiético” raramente convence. Risco, números e uma alternativa pronta convencem mais. Preencha os
+      campos e copie um argumento em quatro partes para levar à reunião.
+    </p>
+    <ol class="passos">
+      {passos.map(([nome, texto], i) => (
+        <li><span class="p-num">{i + 1}</span><span><strong>{nome}.</strong> {texto}</span></li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap kit">
+    <form class="kit-form" id="kit" onsubmit="return false">
+      <div class="campo">
+        <label for="padrao">Qual padrão você identificou?</label>
+        <select id="padrao">
+          {padroes.map((p) => <option value={p.slug}>{p.tecnico}: {p.comum}</option>)}
+        </select>
+        <p class="ajuda">Na dúvida, use a <a href="/ferramentas/arvore-de-decisao/">árvore de decisão</a>.</p>
+      </div>
+      <div class="campo">
+        <label for="tela">Em qual tela ou fluxo?</label>
+        <input id="tela" type="text" placeholder="Ex.: checkout do app, tela de contratação do empréstimo" />
+      </div>
+      <div class="campo">
+        <label for="alternativa">Qual alternativa você propõe?</label>
+        <textarea id="alternativa"></textarea>
+        <p class="ajuda">Sugerimos uma alternativa a partir da ficha. Ajuste para o seu contexto.</p>
+      </div>
+      <div class="campo-duplo">
+        <div class="campo">
+          <label for="metrica">O que acompanhar?</label>
+          <select id="metrica">{metricas.map(([valor, rotulo]) => <option value={valor}>{rotulo}</option>)}</select>
+        </div>
+        <div class="campo">
+          <label for="prazo">Por quanto tempo?</label>
+          <select id="prazo">{prazos.map((m) => <option>{m}</option>)}</select>
+        </div>
+      </div>
+    </form>
+
+    <div class="kit-saida">
+      <div class="saida-topo">
+        <h2>Seu argumento</h2>
+        <button class="btn btn-primario btn-pequeno" type="button" data-copiar-de="texto-kit" data-aviso="Argumento copiado">
+          <Icone nome="copiar" />
+          Copiar argumento
+        </button>
+      </div>
+      <div class="saida-texto" id="texto-kit" aria-live="polite"></div>
+      <p class="suave pequeno">Revise o texto antes de enviar. Os artigos de lei são resumos: confira o texto oficial em <a href="/casos-e-leis/leis/">Leis e normas</a>.</p>
+    </div>
+  </section>
+
+  <script type="application/json" id="dados-kit" set:html={JSON.stringify(dados)} />
+</Base>
+
+<style>
+  .passos { list-style: none; padding: 0; margin-top: var(--s6); display: grid; gap: var(--s3); max-width: 760px; }
+  @media (min-width: 760px) { .passos { grid-template-columns: 1fr 1fr; } }
+  .passos li { display: flex; gap: var(--s3); align-items: flex-start; }
+  .p-num {
+    flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+    background: var(--neon); color: var(--azul); font-family: var(--f-titulo); font-weight: 700;
+  }
+  .kit { display: grid; gap: var(--s7); }
+  @media (min-width: 1040px) { .kit { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--s8); } .kit-saida { position: sticky; top: 104px; align-self: start; } }
+  .kit-form { display: grid; gap: var(--s5); align-content: start; }
+  .campo-duplo { display: grid; gap: var(--s5); }
+  @media (min-width: 560px) { .campo-duplo { grid-template-columns: 1fr 1fr; } }
+  .kit-saida { display: grid; gap: var(--s4); }
+  .saida-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s3); }
+  .saida-topo h2 { font-size: 1.5rem; }
+  .saida-texto {
+    background: var(--branco);
+    color: var(--azul);
+    border-radius: var(--r-tela);
+    padding: var(--s5) var(--s6);
+    display: grid;
+    gap: var(--s4);
+    line-height: 1.55;
+  }
+  .saida-texto :global(h3) { color: var(--azul); font-size: 1rem; margin-bottom: var(--s1); }
+  .saida-texto :global(p) { color: var(--azul); }
+</style>
+
+<script>
+  type Dado = { tecnico: string; comum: string; resumo: string; alternativa: string; lei: string; caso: string; questionario: number | null };
+  const dados: Record<string, Dado> = JSON.parse(document.getElementById('dados-kit')?.textContent || '{}');
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const padrao = $<HTMLSelectElement>('padrao');
+  const tela = $<HTMLInputElement>('tela');
+  const alternativa = $<HTMLTextAreaElement>('alternativa');
+  const metrica = $<HTMLSelectElement>('metrica');
+  const prazo = $<HTMLSelectElement>('prazo');
+  const saida = $('texto-kit');
+  let alternativaEditada = false;
+
+  const esc = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string);
+
+  function montar() {
+    if (!padrao || !saida) return;
+    const d = dados[padrao.value];
+    const onde = tela?.value.trim() ? `Na tela “${tela.value.trim()}”` : 'Nesta tela';
+    const pesquisa = d.questionario ? ` É uma prática que ${d.questionario} de 25 profissionais de design ouvidos numa pesquisa de 2026 disseram já ter visto.` : '';
+    saida.innerHTML = `
+      <div><h3>1. Problema</h3><p>${esc(onde)}, identifiquei o padrão ${esc(d.tecnico)} (${esc(d.comum.toLowerCase())}). ${esc(d.resumo)}${esc(pesquisa)}</p></div>
+      <div><h3>2. Risco</h3><p>Risco legal: ${esc(d.lei)}</p><p>Risco de reputação e financeiro: ${esc(d.caso)}</p></div>
+      <div><h3>3. Alternativa</h3><p>${esc(alternativa?.value.trim() || d.alternativa)}</p></div>
+      <div><h3>4. Como medir</h3><p>Proponho testar a alternativa por ${esc(prazo?.value || 'um mês')} e acompanhar ${esc(metrica?.value || 'a taxa de conversão')}, para comparar com a versão atual.</p></div>`;
+  }
+
+  function trocarPadrao() {
+    if (!padrao || !alternativa) return;
+    if (!alternativaEditada) alternativa.value = dados[padrao.value].alternativa;
+    montar();
+  }
+
+  const inicial = new URLSearchParams(window.location.search).get('padrao');
+  if (padrao && inicial && dados[inicial]) padrao.value = inicial;
+  padrao?.addEventListener('change', trocarPadrao);
+  alternativa?.addEventListener('input', () => { alternativaEditada = true; montar(); });
+  [tela, metrica, prazo].forEach((el) => el?.addEventListener('input', montar));
+  [metrica, prazo].forEach((el) => el?.addEventListener('change', montar));
+  trocarPadrao();
+</script>

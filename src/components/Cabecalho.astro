@@ -1,0 +1,171 @@
+---
+import Icone from './Icone.astro';
+import { site, nav } from '../data/site.js';
+
+const atual = Astro.url.pathname;
+const ativo = (href: string) => (href === '/' ? atual === '/' : atual.startsWith(href.replace(/\/$/, '')));
+---
+<header class="cabecalho">
+  <div class="wrap cabecalho-linha">
+    <a class="logo" href="/" aria-label={`${site.nome}, página inicial`}>
+      <span class="logo-marca" aria-hidden="true"></span>
+      <span>{site.nome}</span>
+    </a>
+
+    <nav class="nav" id="menu-principal" aria-label="Principal">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={ativo(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="cabecalho-acoes">
+      <a class="botao-busca" href="/padroes/#busca">
+        <Icone nome="busca" />
+        <span>Buscar</span>
+      </a>
+      <button class="botao-menu" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <Icone nome="menu" />
+        <span class="visualmente-oculto">Abrir menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--azul);
+    border-bottom: 1px solid var(--linha);
+  }
+  .cabecalho-linha {
+    display: flex;
+    align-items: center;
+    gap: var(--s5);
+    min-height: 72px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+  /* Marca: um canto de seleção, como numa ferramenta de inspeção */
+  .logo-marca {
+    width: 22px;
+    height: 22px;
+    border: 3px solid var(--neon);
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 3px;
+    position: relative;
+  }
+  .logo-marca::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 8px;
+    height: 8px;
+    background: var(--neon);
+    border-radius: 2px;
+  }
+  .nav { margin-left: auto; }
+  .nav ul { display: flex; gap: var(--s1); list-style: none; padding: 0; }
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--s3);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: var(--r-ui);
+  }
+  .nav a:hover { background: var(--azul-fundo); }
+  .nav a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-color: var(--neon);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
+  }
+  .cabecalho-acoes { display: flex; align-items: center; gap: var(--s2); }
+  .botao-busca {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    min-height: 44px;
+    padding: 0 var(--s4);
+    background: var(--neon);
+    color: var(--azul);
+    border-radius: var(--r-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    text-decoration: none;
+  }
+  .botao-busca :global(svg) { width: 18px; height: 18px; }
+  .botao-menu {
+    display: none;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    background: transparent;
+    color: var(--branco);
+    border: 1.5px solid var(--linha-forte);
+    border-radius: var(--r-ui);
+    cursor: pointer;
+  }
+  .botao-menu :global(svg) { width: 22px; height: 22px; }
+
+  @media (max-width: 1040px) {
+    .botao-menu { display: grid; }
+    .cabecalho-acoes { margin-left: auto; }
+    .nav {
+      display: none;
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      background: var(--azul);
+      border-bottom: 1px solid var(--linha);
+      padding: var(--s3) var(--gutter) var(--s5);
+    }
+    .nav.aberto { display: block; }
+    .nav ul { flex-direction: column; }
+    .nav a { width: 100%; font-size: 1.0625rem; min-height: 48px; }
+  }
+  @media (max-width: 420px) {
+    .botao-busca span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .botao-busca { padding: 0; width: 44px; justify-content: center; }
+  }
+</style>
+
+<script>
+  const botao = document.querySelector('.botao-menu');
+  const nav = document.getElementById('menu-principal');
+  botao?.addEventListener('click', () => {
+    const aberto = botao.getAttribute('aria-expanded') === 'true';
+    botao.setAttribute('aria-expanded', String(!aberto));
+    nav?.classList.toggle('aberto', !aberto);
+    const rotulo = botao.querySelector('.visualmente-oculto');
+    if (rotulo) rotulo.textContent = aberto ? 'Abrir menu' : 'Fechar menu';
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav?.classList.contains('aberto')) {
+      nav.classList.remove('aberto');
+      botao?.setAttribute('aria-expanded', 'false');
+      (botao as HTMLElement | null)?.focus();
+    }
+  });
+</script>

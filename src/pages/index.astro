@@ -1,0 +1,212 @@
+---
+import Base from '../layouts/Base.astro';
+import TelaHome from '../components/TelaHome.astro';
+import Icone from '../components/Icone.astro';
+import { pesquisa } from '../data/pesquisa.js';
+import { padroes } from '../data/padroes.js';
+
+const atalhos = [
+  { pergunta: 'Isso pode?', texto: 'Entenda o que são padrões enganosos e por que eles funcionam, em linguagem simples.', href: '/padroes/o-que-sao/', acao: 'Começar pelo básico' },
+  { pergunta: 'É mesmo um padrão enganoso?', texto: 'Revise sua tela com perguntas de sim ou não, cada uma ligada a uma ficha.', href: '/ferramentas/checklist/', acao: 'Revisar uma tela' },
+  { pergunta: 'Como convenço a gestão?', texto: 'Monte um argumento com risco legal, casos reais e uma alternativa pronta.', href: '/ferramentas/kit-de-argumentacao/', acao: 'Montar meu argumento' },
+];
+const sugestoes = ['contador de oferta', 'seguro já marcado', 'taxa no fim', 'difícil cancelar'];
+const maximo = pesquisa.total;
+---
+<Base>
+  <section class="hero">
+    <div class="wrap hero-grade">
+      <div class="hero-texto">
+        <h1>Persuadir sem manipular.</h1>
+        <p class="lead">
+          Um hub para profissionais de design reconhecerem padrões enganosos, desenharem alternativas éticas e
+          defenderem essas escolhas com a gestão.
+        </p>
+
+        <form class="busca-home" action="/padroes/" method="get" role="search">
+          <label for="q-home">O que a sua tela faz?</label>
+          <div class="busca-linha">
+            <input id="q-home" name="q" type="search" placeholder="Ex.: contador de oferta, taxa que aparece no fim" autocomplete="off" />
+            <button class="btn btn-primario" type="submit">
+              <Icone nome="busca" />
+              <span>Buscar</span>
+            </button>
+          </div>
+          <p class="sugestoes">
+            <span class="suave">Experimente:</span>
+            {sugestoes.map((s) => <a href={`/padroes/?q=${encodeURIComponent(s)}`}>{s}</a>)}
+          </p>
+        </form>
+      </div>
+
+      <div class="hero-demo">
+        <TelaHome />
+      </div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="wrap">
+      <h2 class="secao-titulo">Comece pela sua dúvida</h2>
+      <ul class="linhas atalhos">
+        {atalhos.map((a) => (
+          <li>
+            <a class="atalho" href={a.href}>
+              <span class="atalho-pergunta">{a.pergunta}</span>
+              <span class="atalho-texto">{a.texto}</span>
+              <span class="atalho-acao">{a.acao}<Icone nome="seta" /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="wrap pesquisa-grade">
+      <div>
+        <h2 class="secao-titulo">O que 25 profissionais de design já viram</h2>
+        <p class="suave leitura">
+          Respostas de um questionário com designers de UX/UI e de produto, aplicado em 2026 para esta pesquisa.
+          Cada prática leva à ficha do padrão.
+        </p>
+        <ul class="destaques">
+          {pesquisa.destaques.map((d) => (
+            <li><strong>{d.n} de {maximo}</strong> {d.texto}.</li>
+          ))}
+        </ul>
+      </div>
+      <ul class="barras" aria-label="Práticas enganosas já vistas pelos respondentes">
+        {pesquisa.praticasVistas.map((p) => (
+          <li>
+            <a href={`/padroes/${p.ficha}/`}>
+              <span class="barra-rotulo">{p.label}</span>
+              <span class="barra-trilho" aria-hidden="true"><span class="barra" style={`width:${(p.n / maximo) * 100}%`}></span></span>
+              <span class="barra-valor">{p.n} de {maximo}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="wrap">
+      <div class="acervo-topo">
+        <h2 class="secao-titulo">Os sete padrões do acervo</h2>
+        <a class="btn btn-secundario" href="/padroes/">Ver o acervo completo</a>
+      </div>
+      <ul class="lista-padroes">
+        {padroes.map((p) => (
+          <li>
+            <a href={`/padroes/${p.slug}/`}>
+              <span class="lp-tecnico">{p.tecnico}</span>
+              <span class="lp-comum">{p.comum}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: var(--s8) var(--s8); }
+  .hero-grade {
+    display: grid;
+    gap: var(--s7);
+    align-items: center;
+  }
+  @media (min-width: 980px) {
+    .hero-grade { grid-template-columns: 1.1fr 0.9fr; gap: var(--s8); }
+  }
+  .hero h1 { font-size: clamp(2.75rem, 1.4rem + 6vw, 5.5rem); max-width: 11ch; }
+  .hero .lead { margin-top: var(--s5); }
+
+  .busca-home { margin-top: var(--s6); display: grid; gap: var(--s3); max-width: 560px; }
+  .busca-home label { font-family: var(--f-titulo); font-weight: 600; font-size: 1.25rem; }
+  .busca-linha { display: flex; gap: var(--s2); }
+  .busca-linha input { flex: 1; min-height: 56px; font-size: 1.0625rem; }
+  .busca-linha .btn { min-height: 56px; }
+  @media (max-width: 480px) {
+    .busca-linha { flex-direction: column; }
+  }
+  .sugestoes { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); font-size: 0.9375rem; }
+  .sugestoes a { min-height: 32px; display: inline-flex; align-items: center; }
+
+  .atalho {
+    display: grid;
+    gap: var(--s2) var(--s6);
+    padding-block: var(--s6);
+    text-decoration: none;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 860px) {
+    .atalho { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; align-items: center; }
+  }
+  .atalho-pergunta {
+    font-family: var(--f-titulo);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .atalho-texto { color: var(--suave); max-width: 46ch; }
+  .atalho-acao {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .atalho-acao :global(svg) { width: 20px; height: 20px; color: var(--neon); transition: transform 160ms ease; }
+  .atalho:hover .atalho-pergunta { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .atalho:hover .atalho-acao :global(svg) { transform: translateX(4px); }
+
+  .pesquisa-grade { display: grid; gap: var(--s7); }
+  @media (min-width: 980px) {
+    .pesquisa-grade { grid-template-columns: 0.8fr 1.2fr; }
+  }
+  .destaques { list-style: none; padding: 0; margin-top: var(--s6); display: grid; gap: var(--s4); }
+  .destaques li { border-left: 3px solid var(--neon); padding-left: var(--s4); max-width: 40ch; }
+  .destaques strong { font-family: var(--f-titulo); font-size: 1.25rem; display: block; }
+
+  .barras { list-style: none; padding: 0; display: grid; gap: var(--s2); }
+  .barras a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px var(--s4);
+    padding: var(--s3) var(--s3);
+    margin-inline: calc(-1 * var(--s3));
+    text-decoration: none;
+    border-radius: var(--r-ui);
+  }
+  .barras a:hover { background: var(--azul-fundo); }
+  .barra-rotulo { font-weight: 500; grid-row: 1; grid-column: 1; }
+  .barra-valor { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; grid-row: 1; grid-column: 2; }
+  .barra-trilho { grid-row: 2; grid-column: 1 / -1; height: 10px; background: var(--azul-fundo); border-radius: 999px; overflow: hidden; }
+  .barras a:hover .barra-trilho { background: rgba(239, 239, 239, 0.15); }
+  .barra { display: block; height: 100%; background: var(--neon); border-radius: 999px; }
+
+  .acervo-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s4); margin-bottom: var(--s5); }
+  .acervo-topo .secao-titulo { margin-bottom: 0; }
+  .lista-padroes {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    border-top: 1px solid var(--linha);
+    border-left: 1px solid var(--linha);
+  }
+  .lista-padroes li { border-right: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+  .lista-padroes a {
+    display: grid;
+    gap: var(--s2);
+    padding: var(--s5);
+    min-height: 100%;
+    text-decoration: none;
+  }
+  .lista-padroes a:hover { background: var(--azul-fundo); }
+  .lp-tecnico { font-family: var(--f-titulo); font-weight: 600; font-size: 1.25rem; line-height: 1.2; }
+  .lp-comum { color: var(--suave); font-size: 0.9375rem; }
+</style>

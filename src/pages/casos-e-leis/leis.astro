@@ -1,0 +1,81 @@
+---
+import Base from '../../layouts/Base.astro';
+import { leis } from '../../data/leis.js';
+import { getPadrao } from '../../data/padroes.js';
+---
+<Base titulo="Leis e normas" descricao="Os artigos do CDC, da LGPD e dos decretos do comércio eletrônico e do SAC que tratam de padrões enganosos, em linguagem simples.">
+  <section class="wrap cabecalho-pagina">
+    <ol class="trilha">
+      <li><a href="/casos-e-leis/">Casos e leis</a></li>
+      <li aria-current="page">Leis e normas</li>
+    </ol>
+    <h1>Leis e normas</h1>
+    <p class="lead">
+      Os artigos da legislação brasileira que mais aparecem nas fichas, resumidos em linguagem simples. Use-os para
+      mostrar à gestão que um padrão enganoso não é só uma questão de experiência: é risco legal.
+    </p>
+    <p class="aviso-legal">
+      Resumo informativo, preparado para profissionais de design. Não é aconselhamento jurídico: confira sempre o
+      texto oficial e, em caso de dúvida, envolva o jurídico da empresa.
+    </p>
+    <nav class="ancoras" aria-label="Leis nesta página">
+      <ul class="etiquetas">
+        {leis.map((l) => <li><a class="etiqueta" href={`#${l.slug}`}>{l.sigla}</a></li>)}
+      </ul>
+    </nav>
+  </section>
+
+  {leis.map((l) => (
+    <section class="wrap lei regua" id={l.slug} aria-labelledby={`t-${l.slug}`}>
+      <div class="lei-cabeca">
+        <h2 id={`t-${l.slug}`}>{l.nome}</h2>
+        <p class="suave">{l.numero}</p>
+        <p class="lei-papel">{l.papel}</p>
+        <a href={l.url} target="_blank" rel="noopener">Texto oficial no Planalto<span class="visualmente-oculto"> (abre em nova aba)</span></a>
+      </div>
+      <ul class="linhas artigos">
+        {l.artigos.map((a) => (
+          <li>
+            <p class="art-num">{a.artigo}</p>
+            <div>
+              <p>{a.simples}</p>
+              <ul class="etiquetas">
+                {a.padroes.map((s) => <li><a class="etiqueta" href={`/padroes/${s}/`}>{getPadrao(s).tecnico}</a></li>)}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .aviso-legal {
+    margin-top: var(--s5);
+    max-width: 64ch;
+    padding: var(--s4) var(--s5);
+    border-left: 3px solid var(--neon);
+    background: var(--azul-fundo);
+    border-radius: 0 var(--r-ui) var(--r-ui) 0;
+    font-size: 0.9375rem;
+  }
+  .ancoras { margin-top: var(--s5); }
+  .lei {
+    display: grid;
+    gap: var(--s5);
+    padding-block: var(--s7);
+    
+    scroll-margin-top: 88px;
+  }
+  @media (min-width: 960px) {
+    .lei { grid-template-columns: 340px minmax(0, 1fr); gap: var(--s8); }
+    .lei-cabeca { position: sticky; top: 104px; align-self: start; }
+  }
+  .lei-cabeca { display: grid; gap: var(--s2); align-content: start; }
+  .lei-papel { margin-top: var(--s2); max-width: 40ch; }
+  .artigos > li { display: grid; gap: var(--s2) var(--s5); padding-block: var(--s4); }
+  @media (min-width: 640px) { .artigos > li { grid-template-columns: 200px minmax(0, 1fr); } }
+  .art-num { font-family: var(--f-titulo); font-weight: 600; }
+  .artigos .etiquetas { margin-top: var(--s3); }
+</style>

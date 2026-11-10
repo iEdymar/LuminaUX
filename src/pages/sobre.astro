@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.js';
+
+const etapas = [
+  ['Questionário', 'Respondido por 25 profissionais de UX/UI e de produto, com perguntas sobre as práticas que já viram, as dificuldades para questioná-las e os recursos que gostariam de ter.'],
+  ['Personas e mapas de empatia', 'Três perfis saíram das respostas: quem ainda não reconhece os padrões, quem reconhece mas não sabe como se posicionar e quem argumenta, mas não consegue convencer a gestão.'],
+  ['Jornadas', 'Para cada perfil, uma jornada mostrou onde o hub entra e o que ele precisa oferecer em cada momento.'],
+  ['Casos e literatura', 'Casos de empresas punidas, a legislação brasileira e a literatura sobre padrões enganosos e design ético definiram as fichas e os princípios.'],
+];
+---
+<Base titulo="Sobre o hub" descricao="Como e por que este hub foi criado: um trabalho de conclusão de curso em Design Digital baseado em pesquisa com profissionais de design.">
+  <section class="wrap cabecalho-pagina">
+    <h1>Sobre o hub</h1>
+    <p class="lead">
+      O {site.nome} reúne, num só lugar, o que um profissional de design precisa para reconhecer padrões enganosos,
+      desenhar alternativas éticas e defender essas escolhas com a gestão.
+    </p>
+  </section>
+
+  <section class="wrap secao sobre-grade">
+    <h2>Por que existe</h2>
+    <div class="prosa leitura">
+      <p>
+        A literatura já descreve bem os padrões enganosos, mas oferece pouco apoio prático para quem desenha as
+        telas no dia a dia. Na pesquisa que deu origem ao hub, os profissionais relataram informação espalhada,
+        falta de tempo para montar argumentos e medo de questionar demandas da liderança.
+      </p>
+      <p>O hub responde a essas dores com fichas, princípios, casos, leis e ferramentas, sempre em linguagem simples.</p>
+    </div>
+  </section>
+
+  <section class="wrap secao sobre-grade">
+    <h2>Como foi feito</h2>
+    <ol class="etapas-sobre leitura">
+      {etapas.map(([titulo, texto]) => (
+        <li><h3>{titulo}</h3><p>{texto}</p></li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap secao sobre-grade">
+    <h2>Quem fez</h2>
+    <div class="prosa leitura">
+      <p>
+        Trabalho de conclusão de curso de {site.autor}, em {site.curso}, com o título provisório “Design ético em
+        interfaces digitais: proposta de um hub de apoio à prevenção de deceptive patterns”.
+      </p>
+      <p>
+        <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn<span class="visualmente-oculto"> (abre em nova aba)</span></a>
+        e <a href={site.portfolio} target="_blank" rel="noopener">portfólio<span class="visualmente-oculto"> (abre em nova aba)</span></a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap secao sobre-grade">
+    <h2>Limites</h2>
+    <div class="prosa leitura">
+      <p>
+        O hub é informativo e não substitui orientação jurídica. Os artigos de lei aparecem resumidos, e os casos
+        foram descritos a partir de fontes públicas, citadas em cada um. As telas de exemplo são fictícias.
+      </p>
+      <p>Conteúdo atualizado em {site.atualizado}.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sobre-grade { display: grid; gap: var(--s5); }
+  @media (min-width: 960px) { .sobre-grade { grid-template-columns: 300px minmax(0, 1fr); gap: var(--s8); } }
+  .sobre-grade h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); }
+  .etapas-sobre { padding-left: 1.4em; display: grid; gap: var(--s5); }
+  .etapas-sobre li::marker { color: var(--neon); font-family: var(--f-titulo); font-weight: 700; }
+  .etapas-sobre h3 { font-size: 1.1875rem; margin-bottom: var(--s1); }
+</style>
