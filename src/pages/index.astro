@@ -142,7 +142,9 @@ const maximo = pesquisa.total;
     grid-template-columns: 1fr;
   }
   @media (min-width: 860px) {
-    .atalho { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; align-items: center; }
+    /* Colunas de largura fixa: o texto do meio começa sempre no mesmo ponto, em todas as linhas */
+    .atalho { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 240px; align-items: center; }
+    .atalho-acao { justify-self: start; }
   }
   .atalho-pergunta {
     font-family: var(--f-titulo);
@@ -201,8 +203,9 @@ const maximo = pesquisa.total;
   .lista-padroes li { border-right: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
   .lista-padroes a {
     display: grid;
-    gap: var(--s2);
-    padding: var(--s5);
+    align-content: start;
+    gap: 24px var(--s2);
+    padding: 50px var(--s4);
     min-height: 100%;
     text-decoration: none;
   }

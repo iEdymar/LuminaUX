@@ -1,5 +1,5 @@
 // As 7 fichas do Acervo de padrões.
-// "completa: true" = ficha com todas as seções e exemplo visual (as três fichas das jornadas).
+// "completa: true" = ficha com todas as seções e telas de exemplo (como aparece e como evitar).
 
 export const padroes = [
   {
@@ -125,7 +125,7 @@ export const padroes = [
     tecnicoAntigo: 'Roach Motel',
     comum: 'Dificultar o cancelamento ou a saída',
     categoria: 'Obstrução',
-    completa: false,
+    completa: true,
     questionario: 16,
     questionarioNota: 'e 16 de 25 viram etapas desnecessárias',
     resumo:
@@ -163,7 +163,7 @@ export const padroes = [
     tecnico: 'Misdirection',
     comum: 'Desviar a atenção para a opção que interessa à empresa',
     categoria: 'Interferência na interface',
-    completa: false,
+    completa: true,
     questionario: 12,
     questionarioNota: 'e 8 de 25 viram opções importantes menos visíveis',
     resumo:
@@ -200,7 +200,7 @@ export const padroes = [
     tecnico: 'Sneaking / Hidden Subscription',
     comum: 'Contratar ou cobrar sem consentimento claro',
     categoria: 'Ocultação',
-    completa: false,
+    completa: true,
     questionario: null,
     questionarioNota: 'Não estava entre as opções do questionário; entra pelos casos reais.',
     resumo:
@@ -239,7 +239,7 @@ export const padroes = [
     tecnico: 'Privacy Zuckering',
     comum: 'Levar o usuário a compartilhar mais dados do que pretendia',
     categoria: 'Ação forçada',
-    completa: false,
+    completa: true,
     questionario: null,
     questionarioNota: 'Citado em uma resposta aberta do questionário (pedir dados demais no cadastro).',
     resumo:

@@ -83,11 +83,122 @@ const errado = versao === 'errado';
       </div>
     </>
   )}
+
+  {padrao === 'dificil-cancelar' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>streaming.exemplo/conta</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Minha assinatura</p>
+        <div class="linha-preco"><span>Plano Premium</span><strong>R$ 39,90 por mês</strong></div>
+        {errado ? (
+          <>
+            <span class="botao-tela">Mudar de plano</span>
+            <div class="alvo link-tela">Precisa de ajuda?<span class="marcacao"><b>1</b>Cancelar não aparece</span></div>
+            <div class="alvo aviso">Para cancelar, ligue para 0800 000 0000, de segunda a sexta, das 9h às 18h.<span class="marcacao"><b>2</b>Só por telefone</span></div>
+            <div class="alvo miudo">Antes de ligar, veja as 3 ofertas especiais que separamos para você.<span class="marcacao"><b>3</b>Retenção em várias etapas</span></div>
+          </>
+        ) : (
+          <>
+            <p class="miudo">Renova em 05/12.</p>
+            <div class="duas-acoes">
+              <span class="botao-tela-sec">Mudar de plano</span>
+              <div class="alvo"><span class="botao-tela-sec">Cancelar assinatura</span><span class="marcacao"><b>1</b>Cancelar à vista</span></div>
+            </div>
+            <div class="alvo aviso">Antes de sair: 3 meses por R$ 19,90. Se preferir, é só continuar.<span class="marcacao"><b>2</b>Uma oferta, fácil de recusar</span></div>
+            <div class="alvo miudo">O cancelamento vale na hora e você recebe o comprovante por e-mail. O acesso continua até 05/12.<span class="marcacao"><b>3</b>Efeito imediato e comprovante</span></div>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {padrao === 'misdirection' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>loja.exemplo/checkout</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Antes de finalizar</p>
+        {errado ? (
+          <>
+            <div class="aviso">Ganhe frete grátis com o Premium!</div>
+            <div class="alvo"><span class="botao-tela">Quero frete grátis</span><span class="marcacao"><b>1</b>Opção da empresa em destaque</span></div>
+            <div class="alvo link-tela">Não, prefiro pagar mais pelo frete<span class="marcacao"><b>2</b>Recusa apagada e que culpa</span></div>
+            <div class="alvo miudo">R$ 14,90 por mês após 30 dias. Renovação automática.<span class="marcacao"><b>3</b>Condição em letras miúdas</span></div>
+          </>
+        ) : (
+          <>
+            <div class="alvo">
+              <p>Quer experimentar o Premium? Frete grátis por <strong>R$ 14,90 por mês</strong>, com 30 dias grátis. Renova todo mês, e você pode cancelar quando quiser.</p>
+              <span class="marcacao"><b>1</b>Condições visíveis</span>
+            </div>
+            <div class="alvo duas-acoes">
+              <span class="botao-tela-sec">Assinar o Premium</span>
+              <span class="botao-tela-sec">Continuar sem o Premium</span>
+              <span class="marcacao"><b>2</b>Mesmo peso, texto neutro</span>
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {padrao === 'contratacao-escondida' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>cursos.exemplo/pagamento</p></div>
+      <div class="tela-corpo">
+        <p class="tela-titulo">Pagamento</p>
+        <div class="linha-preco"><span>Curso de UX Writing</span><span>R$ 197,00</span></div>
+        {errado ? (
+          <>
+            <div class="alvo linha-preco miudo"><span>Clube de descontos (mensal)</span><span>R$ 9,90</span><span class="marcacao"><b>1</b>Assinatura embutida no pedido</span></div>
+            <div class="linha-preco total"><span>Total</span><span>R$ 206,90</span></div>
+            <div class="alvo"><span class="botao-tela">Continuar</span><span class="marcacao"><b>2</b>O botão não diz o que contrata</span></div>
+            <p class="miudo">Ao continuar, você concorda com os termos.</p>
+          </>
+        ) : (
+          <>
+            <div class="linha-preco total"><span>Total</span><span>R$ 197,00</span></div>
+            <div class="alvo aviso">
+              <p>Opcional: clube de descontos por R$ 9,90 por mês. Renova todo mês, cancele quando quiser.</p>
+              <span class="botao-tela-sec" style="margin-top:10px">Adicionar o clube</span>
+              <span class="marcacao"><b>1</b>Oferta separada, com aceite próprio</span>
+            </div>
+            <div class="alvo"><span class="botao-tela">Pagar R$ 197,00</span><span class="marcacao"><b>2</b>O botão diz a ação e o valor</span></div>
+          </>
+        )}
+      </div>
+    </>
+  )}
+
+  {padrao === 'privacy-zuckering' && (
+    <>
+      <div class="tela-barra" aria-hidden="true"><span></span><span></span><span></span><p>app.exemplo/boas-vindas</p></div>
+      <div class="tela-corpo">
+        {errado ? (
+          <>
+            <p class="tela-titulo">Personalize sua experiência</p>
+            <div class="alvo caixa"><span class="quadrado marcado" aria-hidden="true"></span><span>Aceito os Termos de Uso, a Política de Privacidade e o compartilhamento dos meus dados com parceiros.</span><span class="marcacao"><b>1</b>Dados junto com os termos</span></div>
+            <span class="botao-tela">Aceitar e continuar</span>
+            <div class="alvo link-tela">Gerenciar preferências<span class="marcacao"><b>2</b>Recusar exige outras telas</span></div>
+          </>
+        ) : (
+          <>
+            <p class="tela-titulo">Sua privacidade</p>
+            <div class="caixa"><span class="quadrado" aria-hidden="true"></span><span>Li e aceito os Termos de Uso (obrigatório).</span></div>
+            <div class="alvo caixa"><span class="quadrado" aria-hidden="true"></span><span>Compartilhar dados de uso com parceiros para mostrar anúncios (opcional).</span><span class="marcacao"><b>1</b>Opcional, separado e desmarcado</span></div>
+            <span class="botao-tela">Continuar</span>
+            <div class="alvo miudo">Você pode mudar essa escolha quando quiser em Configurações, Privacidade.<span class="marcacao"><b>2</b>Fácil de revogar</span></div>
+          </>
+        )}
+      </div>
+    </>
+  )}
 </div>
 
 <style>
   .tela { width: 100%; }
   .tela .alvo { padding: 2px 0; }
+  .duas-acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; }
+  .duas-acoes .marcacao { left: 6px; }
 </style>
 
 <script>

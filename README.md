@@ -1,4 +1,4 @@
-# Hub Design Ético
+# LuminaUX
 
 Site do TCC de Edimar Sousa (Design Digital, UFC Quixadá): um hub para profissionais de design reconhecerem,
 evitarem e questionarem padrões enganosos em interfaces digitais.
