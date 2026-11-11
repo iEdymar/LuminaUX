@@ -1,6 +1,14 @@
 /* LuminaUX: estilos globais
-   Cores da marca: azul #0131CD (fundos), branco #EFEFEF (textos), neon #B9FC01 (destaques).
-   Derivados: azul-fundo (azul 20% mais escuro) e suave (texto secundário). Todos passam AA. */
+
+   COMO AS CORES FUNCIONAM
+   1. Paleta: as cores da marca, com o hex. Mude aqui e a cor muda no site inteiro.
+   2. Cores de função (--fundo, --texto, --destaque...): o que cada cor faz. As regras usam estas.
+   3. Tema de seção (.tema-papel): troca as cores de função dentro de uma seção.
+      Para dar fundo claro a uma seção, basta pôr a classe: <section class="secao tema-papel">.
+      Para envolver várias seções numa faixa clara: <div class="faixa tema-papel"> ... </div>.
+
+   A regra de uso: o azul é "onde você está" (topo das páginas), as telas de exemplo e as ferramentas
+   interativas. A faixa clara é o conteúdo de leitura e consulta: listas, princípios, casos e leis. */
 
 :root {
   --azul: #0131cd;
@@ -11,6 +19,18 @@
   --linha: rgba(239, 239, 239, 0.22);
   --linha-forte: rgba(239, 239, 239, 0.5);
   --tela-linha: rgba(1, 49, 205, 0.16);
+
+  /* Apoio (discretas, para não roubar atenção) */
+  --azul-hover: #021f86;          /* hover das caixas numeradas */
+  --tinta: #14104a;               /* texto sobre o fundo claro */
+  --tinta-suave: #3f4a7a;         /* texto secundário sobre o fundo claro */
+
+  /* Cores de função (o padrão é o tema azul) */
+  --fundo: var(--azul);
+  --texto: var(--branco);
+  --texto-suave: var(--suave);
+  --destaque: var(--neon);
+  --superficie: var(--azul-fundo);
 
   --f-titulo: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-texto: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -36,8 +56,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--azul);
-  color: var(--branco);
+  background: var(--fundo);
+  color: var(--texto);
   font-family: var(--f-texto);
   font-size: 1.0625rem;
   line-height: 1.6;
@@ -49,7 +69,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--f-titulo);
-  color: var(--branco);
+  color: var(--texto);
   margin: 0;
   text-wrap: balance;
 }
@@ -85,16 +105,16 @@ p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding: 0; }
 
 a {
-  color: var(--branco);
+  color: var(--texto);
   text-decoration-line: underline;
-  text-decoration-color: var(--neon);
+  text-decoration-color: var(--destaque);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
 a:hover { text-decoration-thickness: 3px; }
 
 :focus-visible {
-  outline: 3px solid var(--neon);
+  outline: 3px solid var(--destaque);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -138,10 +158,10 @@ img, svg { display: block; max-width: 100%; }
 .lead {
   font-size: clamp(1.125rem, 1rem + 0.5vw, 1.3rem);
   line-height: 1.55;
-  color: var(--branco);
+  color: var(--texto);
   max-width: 60ch;
 }
-.suave { color: var(--suave); }
+.suave { color: var(--texto-suave); }
 .pequeno { font-size: 0.9375rem; }
 
 .marca-texto {
@@ -156,7 +176,7 @@ img, svg { display: block; max-width: 100%; }
 .prosa > * + * { margin-top: var(--s4); }
 .prosa ul, .prosa ol { padding-left: 1.25em; }
 .prosa li + li { margin-top: var(--s2); }
-.prosa li::marker { color: var(--neon); }
+.prosa li::marker { color: var(--destaque); }
 
 /* Botões */
 .btn {
@@ -179,8 +199,8 @@ img, svg { display: block; max-width: 100%; }
 .btn svg { width: 20px; height: 20px; flex: none; }
 .btn-primario { background: var(--neon); color: var(--azul); }
 .btn-primario:hover { background: var(--branco); }
-.btn-secundario { background: transparent; color: var(--branco); border-color: var(--linha-forte); }
-.btn-secundario:hover { border-color: var(--branco); }
+.btn-secundario { background: transparent; color: var(--texto); border-color: var(--linha-forte); }
+.btn-secundario:hover { border-color: var(--texto); }
 .btn-pequeno { min-height: 44px; padding: 0 var(--s4); font-size: 0.9375rem; }
 
 /* Etiquetas de padrão (links para fichas) */
@@ -195,14 +215,58 @@ img, svg { display: block; max-width: 100%; }
   font-size: 0.9375rem;
   font-weight: 500;
   text-decoration: none;
-  color: var(--branco);
+  color: var(--texto);
 }
-a.etiqueta:hover { border-color: var(--neon); }
+a.etiqueta:hover { border-color: var(--destaque); }
 
 /* Seções */
 .secao { padding-block: var(--s8); }
 .secao + .secao { border-top: 1px solid var(--linha); }
 .wrap.secao + .wrap.secao { border-top: 0; }
+
+/* Temas de seção: trocam as cores de função só dentro da seção */
+.tema-papel {
+  --fundo: var(--branco);
+  --texto: var(--tinta);
+  --texto-suave: var(--tinta-suave);
+  --destaque: var(--azul);
+  --superficie: #e2e1ea;
+  --linha: rgba(20, 16, 74, 0.16);
+  --linha-forte: rgba(20, 16, 74, 0.42);
+}
+.tema-papel { background-color: var(--fundo); color: var(--texto); }
+/* Seção com fundo próprio não precisa de linha divisória, nem a seção seguinte */
+.secao.tema-papel, .tema-papel + .secao { border-top: 0; }
+/* Se a página termina numa seção colorida, ela encosta no rodapé */
+main:has(> .secao.tema-papel:last-child), main:has(> .faixa:last-child) { padding-bottom: 0; }
+
+/* Volta ao tema azul dentro de uma faixa clara (ex.: um painel de resultado) */
+.tema-azul {
+  --fundo: var(--azul);
+  --texto: var(--branco);
+  --texto-suave: var(--suave);
+  --destaque: var(--neon);
+  --superficie: var(--azul-fundo);
+  --linha: rgba(239, 239, 239, 0.22);
+  --linha-forte: rgba(239, 239, 239, 0.5);
+  background-color: var(--fundo);
+  color: var(--texto);
+}
+
+/* Faixa: fundo de largura total que envolve uma ou mais seções */
+.faixa { padding-block: var(--s8); }
+/* A faixa já dá o respiro: a primeira e a última seção dentro dela não somam o seu */
+.faixa.faixa > :first-child { padding-top: 0; }
+.faixa.faixa > :last-child { padding-bottom: 0; }
+.faixa > .regua:first-child { background-image: none; }
+/* Duas seções de largura total na mesma faixa: linha alinhada ao conteúdo entre elas */
+.faixa > .secao:not(.wrap) + .secao:not(.wrap) { border-top: 0; padding-top: 0; }
+.faixa > .secao:not(.wrap) + .secao:not(.wrap) > .wrap { border-top: 1px solid var(--linha); padding-top: var(--s8); }
+.faixa-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s4); margin-bottom: var(--s5); }
+.faixa-topo .secao-titulo { margin-bottom: 0; }
+
+/* Campos de formulário sobre o fundo claro */
+.tema-papel :is(input[type='text'], input[type='search'], select, textarea) { background: #fff; border-color: var(--linha-forte); }
 /* Linha divisória alinhada à margem do conteúdo (para seções que também são .wrap) */
 .wrap.secao + .wrap.secao, .regua {
   background-image: linear-gradient(var(--linha), var(--linha));
@@ -224,14 +288,59 @@ a.etiqueta:hover { border-color: var(--neon); }
   padding: 0;
   margin-bottom: var(--s5);
   font-size: 0.9375rem;
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 .trilha li + li::before { content: '/'; margin-right: var(--s2); color: var(--linha-forte); }
-.trilha a { color: var(--suave); }
+.trilha a { color: var(--texto-suave); }
 
 /* Linhas de lista (índices, ferramentas, casos) */
 .linhas { list-style: none; padding: 0; border-top: 1px solid var(--linha); }
 .linhas > li { border-bottom: 1px solid var(--linha); }
+
+main { padding-bottom: var(--s9); }
+
+/* Caixas numeradas: padrões e princípios (página inicial e Design ético) */
+.cartoes {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: var(--s3);
+  grid-auto-rows: 1fr;
+}
+.cartao {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--s3);
+  row-gap: var(--s2);
+  align-content: start;
+  height: 100%;
+  padding: var(--s5);
+  background: var(--azul-fundo);
+  color: var(--branco);
+  border-radius: var(--r-ui);
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+a.cartao:hover { background: var(--azul-hover); }
+.cartao-numero {
+  font-family: var(--f-titulo);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  color: var(--neon);
+  font-variant-numeric: tabular-nums;
+  min-width: 1ch;
+}
+.cartao-nome {
+  font-family: var(--f-titulo);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.25;
+  padding-top: 0.12em;
+}
+.cartao-frase { grid-column: 2; color: var(--suave); font-size: 0.9375rem; line-height: 1.5; }
+a.cartao:hover .cartao-nome { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
 /* Telas simuladas (mockups) */
 .tela {
@@ -335,7 +444,7 @@ a.etiqueta:hover { border-color: var(--neon); }
 /* Formulários */
 .campo { display: grid; gap: var(--s2); }
 .campo label, .campo legend { font-weight: 600; font-size: 0.9375rem; }
-.campo .ajuda { font-size: 0.875rem; color: var(--suave); }
+.campo .ajuda { font-size: 0.875rem; color: var(--texto-suave); }
 input[type='text'], input[type='search'], select, textarea {
   width: 100%;
   min-height: 48px;
@@ -349,7 +458,7 @@ input[type='text'], input[type='search'], select, textarea {
 }
 textarea { min-height: 112px; resize: vertical; line-height: 1.5; }
 input::placeholder, textarea::placeholder { color: rgba(1, 49, 205, 0.6); }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--neon); outline-offset: 2px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

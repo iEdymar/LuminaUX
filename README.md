@@ -53,9 +53,11 @@ GitHub) publica uma nova versão automaticamente.
 
 ## Sistema visual
 
-- **Cores:** azul `#0131CD` (fundos), branco `#EFEFEF` (textos), verde neon `#B9FC01` (destaques e marcações).
-  Derivados: azul-fundo `#0127A4` (rodapé e superfícies) e suave `#C9D3F5` (texto secundário). Todas as
-  combinações usadas passam no contraste AA.
+- **Cores:** azul `#0131CD` (fundo principal), branco `#EFEFEF` (textos e seções claras) e verde neon `#B9FC01`
+  (destaques e marcações). De apoio, discretas: azul-fundo `#0127A4` (caixas numeradas), tinta `#14104A` (texto sobre
+  o branco) e suave `#C9D3F5` (texto secundário). Todas as combinações usadas passam no contraste AA.
+- **Seções claras:** para dar fundo claro a uma seção, acrescente `tema-papel` à classe dela, por exemplo
+  `<section class="secao tema-papel">`. Textos, links e linhas se ajustam sozinhos.
 - **Fontes:** Poppins (títulos) e Inter (textos), servidas pelo próprio site, sem depender do Google Fonts.
 - **Elemento central:** a camada de inspeção. Marcações em neon apontam, nas telas de exemplo, onde está o padrão
   enganoso e onde está a alternativa ética, como numa revisão de design.
@@ -67,3 +69,10 @@ GitHub) publica uma nova versão automaticamente.
 - Trocar as telas fictícias pelos prints reais do benchmark, quando estiver pronto.
 - Confirmar se a multa da 123 Milhas foi aplicada e o desfecho do caso Meta na ANPD.
 - Completar as referências marcadas como pendentes (DPAF 2026, Shadows in the Interface 2024).
+
+## Ferramentas em desenvolvimento
+
+A árvore de decisão e o registro do alerta estão guardados em `src/pages/ferramentas/_arvore-de-decisao.astro` e
+`_registro-do-alerta.astro`. O `_` no começo do nome faz o Astro ignorar o arquivo: o código fica guardado, mas a
+página não vai para o site. Para publicar de novo, tire o `_` e mude `pronta: false` para `pronta: true` em
+`src/pages/ferramentas/index.astro`.

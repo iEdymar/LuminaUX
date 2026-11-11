@@ -19,6 +19,7 @@ const indice = (p: (typeof padroes)[number]) => [p.tecnico, p.tecnicoAntigo || '
     </p>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap" id="busca">
     <form class="filtros" role="search" onsubmit="return false">
       <div class="campo campo-busca">
@@ -59,9 +60,10 @@ const indice = (p: (typeof padroes)[number]) => [p.tecnico, p.tecnicoAntigo || '
 
     <div class="vazio" id="vazio" hidden>
       <p><strong>Nenhum padrão encontrado.</strong></p>
-      <p class="suave">Tente descrever o que a tela faz, como “contador”, “caixa marcada”, “taxa” ou “cancelar”. Se a dúvida continuar, use a <a href="/ferramentas/arvore-de-decisao/">árvore de decisão</a>.</p>
+      <p class="suave">Tente descrever o que a tela faz, como “contador”, “caixa marcada”, “taxa” ou “cancelar”. Se a dúvida continuar, revise a tela com o <a href="/ferramentas/checklist/">checklist de revisão ética</a>.</p>
     </div>
   </section>
+  </div>
 </Base>
 
 <style>
@@ -80,8 +82,8 @@ const indice = (p: (typeof padroes)[number]) => [p.tecnico, p.tecnicoAntigo || '
     display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s4);
     border: 1.5px solid var(--linha-forte); border-radius: 999px; font-size: 0.9375rem; font-weight: 500;
   }
-  .categorias input:checked + span { background: var(--neon); color: var(--azul); border-color: var(--neon); }
-  .categorias input:focus-visible + span { outline: 3px solid var(--neon); outline-offset: 3px; }
+  .categorias input:checked + span { background: var(--destaque); color: var(--fundo); border-color: var(--destaque); }
+  .categorias input:focus-visible + span { outline: 3px solid var(--destaque); outline-offset: 3px; }
 
   .contagem { margin-bottom: var(--s3); font-size: 0.9375rem; }
   .item {
@@ -95,10 +97,10 @@ const indice = (p: (typeof padroes)[number]) => [p.tecnico, p.tecnicoAntigo || '
   }
   .item-nomes { display: grid; gap: var(--s1); }
   .item-tecnico { font-family: var(--f-titulo); font-weight: 600; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; }
-  .item-comum { color: var(--suave); }
+  .item-comum { color: var(--texto-suave); }
   .item-resumo { max-width: 56ch; }
-  .item-meta { display: grid; gap: var(--s1); font-size: 0.875rem; color: var(--suave); }
-  .item:hover .item-tecnico { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .item-meta { display: grid; gap: var(--s1); font-size: 0.875rem; color: var(--texto-suave); }
+  .item:hover .item-tecnico { text-decoration: underline; text-decoration-color: var(--destaque); text-decoration-thickness: 3px; text-underline-offset: 5px; }
   .vazio { padding: var(--s6) 0; display: grid; gap: var(--s2); max-width: 60ch; }
 </style>
 

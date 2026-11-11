@@ -33,6 +33,7 @@ const fichasPor = (cat: string) => padroes.filter((p) => p.categoria === cat);
     </p>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap secao">
     <div class="duas-colunas">
       <h2>Persuadir ou manipular?</h2>
@@ -116,6 +117,8 @@ const fichasPor = (cat: string) => padroes.filter((p) => p.categoria === cat);
     </div>
   </section>
 
+  </div>
+
   <section class="wrap secao proximo">
     <h2>E agora?</h2>
     <div class="acoes">
@@ -129,7 +132,7 @@ const fichasPor = (cat: string) => padroes.filter((p) => p.categoria === cat);
   .duas-colunas { display: grid; gap: var(--s5); }
   @media (min-width: 960px) { .duas-colunas { grid-template-columns: 320px minmax(0, 1fr); gap: var(--s8); } }
   .perguntas { padding-left: 1.4em; display: grid; gap: var(--s3); }
-  .perguntas li::marker { color: var(--neon); font-weight: 700; font-family: var(--f-titulo); }
+  .perguntas li::marker { color: var(--destaque); font-weight: 700; font-family: var(--f-titulo); }
   .vieses { margin: var(--s5) 0 0; display: grid; gap: var(--s5); }
   .vieses dt { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
   .vieses dd { margin: var(--s1) 0 0; }

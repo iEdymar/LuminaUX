@@ -18,6 +18,7 @@ const etapas = [
     </p>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap secao sobre-grade">
     <h2>Por que existe</h2>
     <div class="prosa leitura">
@@ -63,6 +64,7 @@ const etapas = [
       <p>Conteúdo atualizado em {site.atualizado}.</p>
     </div>
   </section>
+  </div>
 </Base>
 
 <style>
@@ -70,6 +72,6 @@ const etapas = [
   @media (min-width: 960px) { .sobre-grade { grid-template-columns: 300px minmax(0, 1fr); gap: var(--s8); } }
   .sobre-grade h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); }
   .etapas-sobre { padding-left: 1.4em; display: grid; gap: var(--s5); }
-  .etapas-sobre li::marker { color: var(--neon); font-family: var(--f-titulo); font-weight: 700; }
+  .etapas-sobre li::marker { color: var(--destaque); font-family: var(--f-titulo); font-weight: 700; }
   .etapas-sobre h3 { font-size: 1.1875rem; margin-bottom: var(--s1); }
 </style>

@@ -17,6 +17,7 @@ import { leis } from '../../data/leis.js';
     </div>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap" aria-labelledby="t-casos">
     <h2 id="t-casos" class="secao-titulo">Casos reais</h2>
     <ul class="linhas casos">
@@ -40,6 +41,8 @@ import { leis } from '../../data/leis.js';
               <p>{c.aconteceu}</p>
               <h4>Penalidade</h4>
               <p>{c.penalidade}</p>
+              <h4>Lições para profissionais</h4>
+              <ul>{c.licoes.map((l) => <li>{l}</li>)}</ul>
               <h4>Fontes</h4>
               <ul class="fontes">
                 {c.fontes.map((f) => (
@@ -53,6 +56,9 @@ import { leis } from '../../data/leis.js';
     </ul>
   </section>
 
+  </div>
+
+  <div class="faixa tema-papel">
   <section class="wrap secao" aria-labelledby="t-leis">
     <h2 id="t-leis" class="secao-titulo">Leis e normas</h2>
     <ul class="linhas leis">
@@ -66,12 +72,13 @@ import { leis } from '../../data/leis.js';
       ))}
     </ul>
   </section>
+  </div>
 </Base>
 
 <style>
   .atalhos-topo { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s6); }
   .caso { padding-block: var(--s5); display: grid; gap: var(--s4); scroll-margin-top: 96px; }
-  .caso:target { box-shadow: inset 4px 0 0 var(--neon); padding-left: var(--s4); }
+  .caso:target { box-shadow: inset 4px 0 0 var(--destaque); padding-left: var(--s4); }
   .caso-topo { display: grid; gap: var(--s3) var(--s6); }
   @media (min-width: 900px) {
     .caso-topo { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) minmax(0, 0.6fr); align-items: start; }
@@ -89,7 +96,7 @@ import { leis } from '../../data/leis.js';
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
   }
-  details summary::marker { color: var(--neon); }
+  details summary::marker { color: var(--destaque); }
   .caso-detalhe { padding-block: var(--s3) var(--s2); }
   .caso-detalhe h4 { margin-top: var(--s5); }
   .caso-detalhe h4:first-child { margin-top: 0; }

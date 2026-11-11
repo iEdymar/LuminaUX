@@ -2,36 +2,51 @@
 import Base from '../../layouts/Base.astro';
 import Icone from '../../components/Icone.astro';
 
+// pronta: true  → a linha vira link para a página da ferramenta.
+// pronta: false → aparece como "Em desenvolvimento", sem link.
 const ferramentas = [
-  { href: '/ferramentas/checklist/', nome: 'Checklist de revisão ética', texto: 'Perguntas de sim ou não para revisar uma tela antes de entregar. Cada “não” leva à ficha do padrão.', quando: 'Antes de entregar uma tela' },
-  { href: '/ferramentas/arvore-de-decisao/', nome: 'Árvore de decisão', texto: 'Comece pelo que você vê na tela e chegue ao padrão em duas perguntas.', quando: 'Quando bate a dúvida' },
-  { href: '/ferramentas/kit-de-argumentacao/', nome: 'Kit de argumentação', texto: 'Monte um argumento com problema, risco, alternativa e métrica, pronto para copiar.', quando: 'Antes da reunião com a gestão' },
-  { href: '/ferramentas/roteiro-de-conversa/', nome: 'Roteiro de conversa', texto: 'Como levantar a questão com a liderança sem parecer que você está só dizendo não.', quando: 'Na conversa com o PM ou a liderança' },
-  { href: '/ferramentas/registro-do-alerta/', nome: 'Registro do alerta', texto: 'Um texto-modelo para registrar que o risco foi apontado, quando a decisão não é sua.', quando: 'Depois da decisão' },
+  { pronta: true, href: '/ferramentas/checklist/', nome: 'Checklist de revisão ética', texto: 'Perguntas de sim ou não para revisar uma tela antes de entregar. Cada “não” leva à ficha do padrão.', quando: 'Antes de entregar uma tela' },
+  { pronta: true, href: '/ferramentas/kit-de-argumentacao/', nome: 'Kit de argumentação', texto: 'Monte um argumento com problema, risco, alternativa e métrica, pronto para copiar.', quando: 'Antes da reunião com a gestão' },
+  { pronta: true, href: '/ferramentas/roteiro-de-conversa/', nome: 'Roteiro de conversa', texto: 'Como levantar a questão com a liderança sem parecer que você está só dizendo não.', quando: 'Na conversa com o PM ou a liderança' },
+  { pronta: false, nome: 'Trilha de aprendizado', texto: 'Lições curtas, no ritmo de um jogo, para quem está começando: encontre o padrão na tela, acumule dias seguidos e suba de nível.' },
+  { pronta: false, nome: 'Árvore de decisão', texto: 'Comece pelo que você vê na tela e chegue ao padrão em duas perguntas.' },
+  { pronta: false, nome: 'Registro do alerta', texto: 'Um texto-modelo para registrar que o risco foi apontado, quando a decisão não é sua.' },
 ];
 ---
-<Base titulo="Ferramentas" descricao="Checklist, árvore de decisão, kit de argumentação, roteiro de conversa e registro do alerta para o dia a dia de quem projeta interfaces.">
+<Base titulo="Ferramentas" descricao="Checklist de revisão ética, kit de argumentação e roteiro de conversa para o dia a dia de quem projeta interfaces.">
   <section class="wrap cabecalho-pagina">
     <h1>Ferramentas</h1>
     <p class="lead">
-      Para usar no meio do trabalho: na dúvida diante de uma tela, antes de entregar, antes de uma reunião e depois
-      de uma decisão.
+      Para usar no meio do trabalho: antes de entregar uma tela, antes de uma reunião e na conversa com a liderança.
     </p>
   </section>
+  <div class="faixa tema-papel">
   <section class="wrap">
     <ul class="linhas">
       {ferramentas.map((f) => (
         <li>
-          <a class="ferramenta" href={f.href}>
-            <span class="f-quando suave pequeno">{f.quando}</span>
-            <span class="f-nome">{f.nome}</span>
-            <span class="f-texto">{f.texto}</span>
-            <span class="f-seta"><Icone nome="seta" /></span>
-          </a>
+          {f.pronta ? (
+            <a class="ferramenta" href={f.href}>
+              <span class="f-quando suave pequeno">{f.quando}</span>
+              <span class="f-nome">{f.nome}</span>
+              <span class="f-texto">{f.texto}</span>
+              <span class="f-seta"><Icone nome="seta" /></span>
+            </a>
+          ) : (
+            <div class="ferramenta em-breve">
+              <span class="f-quando"><span class="selo">Em desenvolvimento</span></span>
+              <span class="f-nome">{f.nome}</span>
+              <span class="f-texto">{f.texto}</span>
+            </div>
+          )}
         </li>
       ))}
     </ul>
+    <p class="suave pequeno nota">
+      As ferramentas em desenvolvimento ficam para uma próxima etapa da pesquisa.
+    </p>
   </section>
+  </div>
 </Base>
 
 <style>
@@ -51,10 +66,29 @@ const ferramentas = [
   }
   .f-quando { grid-area: quando; }
   .f-nome { grid-area: nome; font-family: var(--f-titulo); font-weight: 600; font-size: clamp(1.4rem, 1.1rem + 1vw, 1.875rem); letter-spacing: -0.015em; line-height: 1.15; }
-  .f-texto { grid-area: texto; color: var(--suave); max-width: 46ch; }
-  .f-seta { grid-area: seta; display: none; color: var(--neon); }
+  .f-texto { grid-area: texto; color: var(--texto-suave); max-width: 46ch; }
+  .f-seta { grid-area: seta; display: none; color: var(--destaque); }
   .f-seta :global(svg) { width: 24px; height: 24px; transition: transform 160ms ease; }
   @media (min-width: 900px) { .f-seta { display: block; } }
-  .ferramenta:hover .f-nome { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .ferramenta:hover .f-nome { text-decoration: underline; text-decoration-color: var(--destaque); text-decoration-thickness: 3px; text-underline-offset: 5px; }
   .ferramenta:hover .f-seta :global(svg) { transform: translateX(4px); }
+
+  /* Em desenvolvimento: sem link, nome em tom secundário e um selo neon */
+  .em-breve .f-nome { color: var(--texto-suave); }
+  .em-breve:hover .f-nome { text-decoration: none; }
+  .selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px 4px 10px;
+    background: var(--neon);
+    color: var(--azul);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  /* Pontinho que lembra "obra em andamento" */
+  .selo::before { content: ''; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; }
+  .nota { margin-top: var(--s5); }
 </style>

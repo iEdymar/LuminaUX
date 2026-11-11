@@ -6,7 +6,7 @@ const etapas = [
     titulo: 'Antes da conversa, confirme',
     texto: 'Abra a ficha do padrão e confira se a tela mostra os sinais descritos. Chegar com certeza muda o tom da conversa.',
     frase: null,
-    links: [['Acervo de padrões', '/padroes/'], ['Árvore de decisão', '/ferramentas/arvore-de-decisao/']],
+    links: [['Acervo de padrões', '/padroes/'], ['Checklist de revisão ética', '/ferramentas/checklist/']],
   },
   {
     titulo: 'Comece pelo objetivo em comum',
@@ -33,7 +33,6 @@ const etapas = [
     titulo: 'Se a resposta for não, registre e amenize',
     texto: 'A decisão final pode não ser sua. Registre por escrito que o risco foi apontado e proponha mudanças que reduzam o dano. Cada ficha tem uma seção “Quando a gestão diz não”.',
     frase: 'Entendido. Vou registrar o alerta no ticket e sugerir pelo menos deixar o valor visível antes do pagamento.',
-    links: [['Registro do alerta', '/ferramentas/registro-do-alerta/']],
   },
 ];
 
@@ -56,6 +55,7 @@ const evitar = [
     </p>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap">
     <ol class="etapas">
       {etapas.map((e, i) => (
@@ -80,6 +80,7 @@ const evitar = [
       ))}
     </ol>
   </section>
+  </div>
 
   <section class="wrap secao">
     <h2 class="secao-titulo">O que costuma atrapalhar</h2>
@@ -93,10 +94,10 @@ const evitar = [
   .etapas { list-style: none; padding: 0; display: grid; border-top: 1px solid var(--linha); }
   .etapas > li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: var(--s5); padding-block: var(--s6); border-bottom: 1px solid var(--linha); }
   @media (min-width: 760px) { .etapas > li { grid-template-columns: 72px minmax(0, 1fr); } }
-  .e-num { font-family: var(--f-titulo); font-weight: 700; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); line-height: 1; color: var(--neon); }
+  .e-num { font-family: var(--f-titulo); font-weight: 700; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); line-height: 1; color: var(--destaque); }
   .e-corpo { display: grid; gap: var(--s4); }
   .e-corpo h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.875rem); }
-  .frase { margin: 0; max-width: 60ch; padding: var(--s4) var(--s5); background: var(--azul-fundo); border-radius: var(--r-ui); border-left: 3px solid var(--neon); }
+  .frase { margin: 0; max-width: 60ch; padding: var(--s4) var(--s5); background: var(--superficie); border-radius: var(--r-ui); border-left: 3px solid var(--destaque); }
   .frase blockquote { margin: var(--s1) 0 0; font-size: 1.125rem; font-weight: 500; }
   .atrapalha { list-style: none; padding: 0; display: grid; gap: var(--s3); }
   .atrapalha li { padding-left: var(--s5); position: relative; }

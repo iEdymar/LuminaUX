@@ -4,6 +4,7 @@ import TelaHome from '../components/TelaHome.astro';
 import Icone from '../components/Icone.astro';
 import { pesquisa } from '../data/pesquisa.js';
 import { padroes } from '../data/padroes.js';
+import { principios } from '../data/principios.js';
 
 const atalhos = [
   { pergunta: 'Isso pode?', texto: 'Entenda o que são padrões enganosos e por que eles funcionam, em linguagem simples.', href: '/padroes/o-que-sao/', acao: 'Começar pelo básico' },
@@ -45,7 +46,7 @@ const maximo = pesquisa.total;
     </div>
   </section>
 
-  <section class="secao">
+  <section class="secao tema-papel">
     <div class="wrap">
       <h2 class="secao-titulo">Comece pela sua dúvida</h2>
       <ul class="linhas atalhos">
@@ -62,7 +63,7 @@ const maximo = pesquisa.total;
     </div>
   </section>
 
-  <section class="secao secao-pesquisa">
+  <section class="secao">
     <div class="wrap pesquisa-grade">
       <div>
         <h2 class="secao-titulo">O que 25 profissionais de design já viram</h2>
@@ -90,24 +91,50 @@ const maximo = pesquisa.total;
     </div>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="secao">
     <div class="wrap">
       <div class="acervo-topo">
         <h2 class="secao-titulo">Os sete padrões do acervo</h2>
         <a class="btn btn-secundario" href="/padroes/">Ver o acervo completo</a>
       </div>
-      <ul class="lista-padroes">
-        {padroes.map((p) => (
+      <ol class="cartoes">
+        {padroes.map((p, i) => (
           <li>
-            <a href={`/padroes/${p.slug}/`}>
-              <span class="lp-tecnico">{p.tecnico}</span>
-              <span class="lp-comum">{p.comum}</span>
+            <a class="cartao" href={`/padroes/${p.slug}/`}>
+              <span class="cartao-numero">{i + 1}</span>
+              <span class="cartao-nome">{p.tecnico}</span>
+              <span class="cartao-frase">{p.comum}</span>
             </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
+
+  <section class="secao">
+    <div class="wrap">
+      <div class="acervo-topo">
+        <div>
+          <h2 class="secao-titulo">Oito princípios para persuadir sem manipular</h2>
+          <p class="suave leitura">O que separa uma interface que ajuda a decidir de uma que decide pela pessoa.</p>
+        </div>
+        <a class="btn btn-secundario" href="/design-etico/">Ler os princípios</a>
+      </div>
+      <ol class="cartoes">
+        {principios.map((p, i) => (
+          <li>
+            <a class="cartao" href={`/design-etico/#${p.slug}`}>
+              <span class="cartao-numero">{i + 1}</span>
+              <span class="cartao-nome">{p.nome}</span>
+              <span class="cartao-frase">{p.frase}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+  </div>
 </Base>
 
 <style>
@@ -153,7 +180,7 @@ const maximo = pesquisa.total;
     letter-spacing: -0.02em;
     line-height: 1.1;
   }
-  .atalho-texto { color: var(--suave); max-width: 46ch; }
+  .atalho-texto { color: var(--texto-suave); max-width: 46ch; }
   .atalho-acao {
     display: inline-flex;
     align-items: center;
@@ -161,8 +188,8 @@ const maximo = pesquisa.total;
     font-weight: 600;
     white-space: nowrap;
   }
-  .atalho-acao :global(svg) { width: 20px; height: 20px; color: var(--neon); transition: transform 160ms ease; }
-  .atalho:hover .atalho-pergunta { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .atalho-acao :global(svg) { width: 20px; height: 20px; color: var(--destaque); transition: transform 160ms ease; }
+  .atalho:hover .atalho-pergunta { text-decoration: underline; text-decoration-color: var(--destaque); text-decoration-thickness: 3px; text-underline-offset: 6px; }
   .atalho:hover .atalho-acao :global(svg) { transform: translateX(4px); }
 
   .pesquisa-grade { display: grid; gap: var(--s7); }
@@ -170,7 +197,7 @@ const maximo = pesquisa.total;
     .pesquisa-grade { grid-template-columns: 0.8fr 1.2fr; }
   }
   .destaques { list-style: none; padding: 0; margin-top: var(--s6); display: grid; gap: var(--s4); }
-  .destaques li { border-left: 3px solid var(--neon); padding-left: var(--s4); max-width: 40ch; }
+  .destaques li { border-left: 3px solid var(--destaque); padding-left: var(--s4); max-width: 40ch; }
   .destaques strong { font-family: var(--f-titulo); font-size: 1.25rem; display: block; }
 
   .barras { list-style: none; padding: 0; display: grid; gap: var(--s2); }
@@ -183,34 +210,14 @@ const maximo = pesquisa.total;
     text-decoration: none;
     border-radius: var(--r-ui);
   }
-  .barras a:hover { background: var(--azul-fundo); }
+  .barras a:hover { background: var(--superficie); }
   .barra-rotulo { font-weight: 500; grid-row: 1; grid-column: 1; }
   .barra-valor { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; grid-row: 1; grid-column: 2; }
-  .barra-trilho { grid-row: 2; grid-column: 1 / -1; height: 10px; background: var(--azul-fundo); border-radius: 999px; overflow: hidden; }
-  .barras a:hover .barra-trilho { background: rgba(239, 239, 239, 0.15); }
-  .barra { display: block; height: 100%; background: var(--neon); border-radius: 999px; }
+  .barra-trilho { grid-row: 2; grid-column: 1 / -1; height: 10px; background: var(--superficie); border-radius: 999px; overflow: hidden; }
+  .barras a:hover .barra-trilho { background: var(--linha-forte); }
+  .barra { display: block; height: 100%; background: var(--destaque); border-radius: 999px; }
 
   .acervo-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s4); margin-bottom: var(--s5); }
   .acervo-topo .secao-titulo { margin-bottom: 0; }
-  .lista-padroes {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    border-top: 1px solid var(--linha);
-    border-left: 1px solid var(--linha);
-  }
-  .lista-padroes li { border-right: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
-  .lista-padroes a {
-    display: grid;
-    align-content: start;
-    gap: 24px var(--s2);
-    padding: 50px var(--s4);
-    min-height: 100%;
-    text-decoration: none;
-  }
-  .lista-padroes a:hover { background: var(--azul-fundo); }
-  .lp-tecnico { font-family: var(--f-titulo); font-weight: 600; font-size: 1.25rem; line-height: 1.2; }
-  .lp-comum { color: var(--suave); font-size: 0.9375rem; }
+  .acervo-topo .secao-titulo + p { margin-top: var(--s3); }
 </style>
-

@@ -13,23 +13,26 @@ import { getPadrao } from '../data/padroes.js';
     </p>
   </section>
 
+  <div class="faixa tema-papel">
   <section class="wrap sumario-secao">
     <h2 class="visualmente-oculto">Os oito princípios</h2>
-    <ul class="sumario">
-      {principios.map((p) => (
+    <ol class="cartoes">
+      {principios.map((p, i) => (
         <li>
-          <a href={`#${p.slug}`}>
-            <span class="s-nome">{p.nome}</span>
-            <span class="s-frase">{p.frase}</span>
+          <a class="cartao" href={`#${p.slug}`}>
+            <span class="cartao-numero">{i + 1}</span>
+            <span class="cartao-nome">{p.nome}</span>
+            <span class="cartao-frase">{p.frase}</span>
           </a>
         </li>
       ))}
-    </ul>
+    </ol>
   </section>
 
-  {principios.map((p) => (
+  {principios.map((p, i) => (
     <section class="wrap principio regua" id={p.slug} aria-labelledby={`t-${p.slug}`}>
       <div class="p-cabeca">
+        <p class="p-numero" aria-hidden="true">{i + 1}</p>
         <h2 id={`t-${p.slug}`}>{p.nome}</h2>
         <p class="p-frase">{p.frase}</p>
       </div>
@@ -80,24 +83,19 @@ import { getPadrao } from '../data/padroes.js';
       veja <a href="/casos-e-leis/leis/">Leis e normas</a>.
     </p>
   </section>
+  </div>
 </Base>
 
 <style>
-  .sumario {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 0;
-    border-top: 1px solid var(--linha);
-    margin-bottom: var(--s7);
+  .sumario-secao { padding-bottom: var(--s7); }
+  .p-numero {
+    font-family: var(--f-titulo);
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--texto);
+    margin-bottom: var(--s3);
   }
-  .sumario li { border-bottom: 1px solid var(--linha); }
-  .sumario-secao + .principio { background-image: none; }
-  .sumario a { display: grid; gap: var(--s1); padding: var(--s4) var(--s4) var(--s4) 0; text-decoration: none; min-height: 100%; }
-  .s-nome { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
-  .s-frase { color: var(--suave); font-size: 0.9375rem; }
-  .sumario a:hover .s-nome { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
   .principio {
     display: grid;
@@ -114,7 +112,7 @@ import { getPadrao } from '../data/padroes.js';
     font-size: 1.1875rem;
     font-weight: 500;
     padding-left: var(--s4);
-    border-left: 3px solid var(--neon);
+    border-left: 3px solid var(--texto);
     max-width: 28ch;
   }
   .p-lista { margin: var(--s5) 0 0; display: grid; gap: var(--s3); }
@@ -125,7 +123,7 @@ import { getPadrao } from '../data/padroes.js';
   .p-corpo h3 { margin: var(--s6) 0 var(--s3); }
   .pratica { list-style: none; padding: 0; display: grid; gap: var(--s3); }
   .pratica li { padding-left: var(--s5); position: relative; }
-  .pratica li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 11px; height: 6px; border: 2.5px solid var(--neon); border-top: 0; border-right: 0; transform: rotate(-45deg); }
+  .pratica li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 11px; height: 6px; border: 2.5px solid var(--destaque); border-top: 0; border-right: 0; transform: rotate(-45deg); }
   .p-rodape { display: grid; gap: var(--s5); margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid var(--linha); }
   @media (min-width: 720px) { .p-rodape { grid-template-columns: 1fr 1fr; } }
   .rotulo { font-weight: 600; margin-bottom: var(--s2); }

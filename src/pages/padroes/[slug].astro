@@ -9,13 +9,13 @@ import { getLei } from '../../data/leis.js';
 import { site } from '../../data/site.js';
 
 export function getStaticPaths() {
-  return padroes.map((p, i) => ({
+  return padroes.map((p) => ({
     params: { slug: p.slug },
-    props: { p, anterior: padroes[i - 1], proximo: padroes[i + 1] },
+    props: { p },
   }));
 }
 
-const { p, anterior, proximo } = Astro.props;
+const { p } = Astro.props;
 const principios = p.principios.map(getPrincipio);
 const casos = p.casos.map(getCaso);
 const secoes = [
@@ -78,11 +78,11 @@ const secoes = [
               <p class="suave leitura">Telas fictícias. As marcações apontam onde olhar em cada versão.</p>
               <div class="comparacao">
                 <figure>
-                  <figcaption>Como aparece</figcaption>
+                  <figcaption><span class="rotulo-tela errado">Como aparece</span></figcaption>
                   <TelaFicha padrao={p.slug} versao="errado" />
                 </figure>
                 <figure>
-                  <figcaption>Como evitar</figcaption>
+                  <figcaption><span class="rotulo-tela certo">Como evitar</span></figcaption>
                   <TelaFicha padrao={p.slug} versao="certo" />
                 </figure>
               </div>
@@ -109,7 +109,8 @@ const secoes = [
             {p.amenizar.map((a) => <li>{a}</li>)}
           </ul>
           <p class="leitura" style="margin-top: var(--s4)">
-            Registre o alerta com o <a href="/ferramentas/registro-do-alerta/">modelo de registro</a>.
+            Se a decisão não for sua, registre por escrito que o risco foi apontado, como sugere o
+            <a href="/ferramentas/roteiro-de-conversa/">roteiro de conversa</a>.
           </p>
         </section>
 
@@ -156,13 +157,29 @@ const secoes = [
           <p class="suave pequeno">Fontes: {p.fontes.join('; ')}. Referências completas na <a href="/biblioteca/">Biblioteca</a>. Atualizado em {site.atualizado}.</p>
         </footer>
 
-        <nav class="vizinhos" aria-label="Outras fichas">
-          {anterior ? <a href={`/padroes/${anterior.slug}/`}><span class="suave pequeno">Ficha anterior</span><span>{anterior.tecnico}</span></a> : <span></span>}
-          {proximo && <a class="prox" href={`/padroes/${proximo.slug}/`}><span class="suave pequeno">Próxima ficha</span><span>{proximo.tecnico}</span></a>}
-        </nav>
       </div>
     </div>
   </article>
+
+  <div class="faixa tema-papel">
+    <section class="wrap" aria-labelledby="t-outras">
+      <div class="faixa-topo">
+        <h2 id="t-outras" class="secao-titulo">Outras fichas do acervo</h2>
+        <a class="btn btn-secundario" href="/padroes/">Ver o acervo completo</a>
+      </div>
+      <ol class="cartoes">
+        {padroes.map((o, i) => o.slug !== p.slug && (
+          <li>
+            <a class="cartao" href={`/padroes/${o.slug}/`}>
+              <span class="cartao-numero">{i + 1}</span>
+              <span class="cartao-nome">{o.tecnico}</span>
+              <span class="cartao-frase">{o.comum}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </div>
 </Base>
 
 <style>
@@ -200,7 +217,10 @@ const secoes = [
   .comparacao { display: grid; gap: var(--s6); margin-top: var(--s5); }
   @media (min-width: 760px) { .comparacao { grid-template-columns: 1fr 1fr; } }
   .comparacao figure { margin: 0; display: grid; gap: var(--s3); align-content: start; }
-  .comparacao figcaption { font-family: var(--f-titulo); font-weight: 600; font-size: 1.125rem; }
+  .comparacao figcaption { font-family: var(--f-titulo); font-weight: 600; font-size: 1rem; }
+  .rotulo-tela { display: inline-block; padding: 4px 14px; border-radius: 999px; }
+  .rotulo-tela.errado { box-shadow: inset 0 0 0 1.5px var(--branco); color: var(--branco); }
+  .rotulo-tela.certo { background: var(--neon); color: var(--azul); }
   .exemplo-real { margin-top: var(--s5); }
 
   .relacionados { display: grid; gap: var(--s6); }
@@ -214,8 +234,4 @@ const secoes = [
   .acoes { display: flex; flex-wrap: wrap; gap: var(--s3); }
 
   .fontes { padding-block: var(--s5); }
-  .vizinhos { display: flex; justify-content: space-between; gap: var(--s4); border-top: 1px solid var(--linha); padding-top: var(--s5); }
-  .vizinhos a { display: grid; gap: 2px; text-decoration: none; font-family: var(--f-titulo); font-weight: 600; min-height: 44px; }
-  .vizinhos a:hover span:last-child { text-decoration: underline; text-decoration-color: var(--neon); }
-  .vizinhos .prox { text-align: right; margin-left: auto; }
 </style>

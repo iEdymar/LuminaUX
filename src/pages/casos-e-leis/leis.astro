@@ -25,6 +25,7 @@ import { getPadrao } from '../../data/padroes.js';
     </nav>
   </section>
 
+  <div class="faixa tema-papel">
   {leis.map((l) => (
     <section class="wrap lei regua" id={l.slug} aria-labelledby={`t-${l.slug}`}>
       <div class="lei-cabeca">
@@ -48,6 +49,7 @@ import { getPadrao } from '../../data/padroes.js';
       </ul>
     </section>
   ))}
+  </div>
 </Base>
 
 <style>
@@ -55,8 +57,8 @@ import { getPadrao } from '../../data/padroes.js';
     margin-top: var(--s5);
     max-width: 64ch;
     padding: var(--s4) var(--s5);
-    border-left: 3px solid var(--neon);
-    background: var(--azul-fundo);
+    border-left: 3px solid var(--destaque);
+    background: var(--superficie);
     border-radius: 0 var(--r-ui) var(--r-ui) 0;
     font-size: 0.9375rem;
   }

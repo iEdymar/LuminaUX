@@ -6,6 +6,8 @@ export const site = {
   atualizado: 'novembro de 2026',
   autor: 'Edimar Sousa',
   curso: 'Design Digital, Universidade Federal do Ceará, Campus Quixadá',
+  email: 'edimarsousa@alu.ufc.br',
+  orientadora: { nome: 'Profa. Me. Leonara Braz', nomeCurto: 'Leonara Braz', email: 'leonara@ufc.br' },
   linkedin: 'https://www.linkedin.com/in/edimarsousa',
   portfolio: 'https://edimarsousa.framer.website',
 };
