@@ -24,6 +24,7 @@
   --azul-hover: #021f86;          /* hover das caixas numeradas */
   --tinta: #14104a;               /* texto sobre o fundo claro */
   --tinta-suave: #3f4a7a;         /* texto secundário sobre o fundo claro */
+  --sublinhado: var(--neon);         /* linha dos links, hover e setas: sempre neon, em qualquer fundo */
 
   /* Cores de função (o padrão é o tema azul) */
   --fundo: var(--azul);
@@ -107,7 +108,7 @@ ul, ol { margin: 0; padding: 0; }
 a {
   color: var(--texto);
   text-decoration-line: underline;
-  text-decoration-color: var(--destaque);
+  text-decoration-color: var(--sublinhado);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
@@ -217,7 +218,7 @@ img, svg { display: block; max-width: 100%; }
   text-decoration: none;
   color: var(--texto);
 }
-a.etiqueta:hover { border-color: var(--destaque); }
+a.etiqueta:hover { border-color: var(--sublinhado); }
 
 /* Seções */
 .secao { padding-block: var(--s8); }
@@ -229,7 +230,7 @@ a.etiqueta:hover { border-color: var(--destaque); }
   --fundo: var(--branco);
   --texto: var(--tinta);
   --texto-suave: var(--tinta-suave);
-  --destaque: var(--azul);
+  --destaque: var(--tinta);
   --superficie: #e2e1ea;
   --linha: rgba(20, 16, 74, 0.16);
   --linha-forte: rgba(20, 16, 74, 0.42);
@@ -340,7 +341,7 @@ a.cartao:hover { background: var(--azul-hover); }
   padding-top: 0.12em;
 }
 .cartao-frase { grid-column: 2; color: var(--suave); font-size: 0.9375rem; line-height: 1.5; }
-a.cartao:hover .cartao-nome { text-decoration: underline; text-decoration-color: var(--neon); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a.cartao:hover .cartao-nome { text-decoration: underline; text-decoration-color: var(--sublinhado); text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
 /* Telas simuladas (mockups) */
 .tela {

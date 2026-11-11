@@ -58,7 +58,6 @@ import { leis } from '../../data/leis.js';
 
   </div>
 
-  <div class="faixa tema-papel">
   <section class="wrap secao" aria-labelledby="t-leis">
     <h2 id="t-leis" class="secao-titulo">Leis e normas</h2>
     <ul class="linhas leis">
@@ -72,7 +71,6 @@ import { leis } from '../../data/leis.js';
       ))}
     </ul>
   </section>
-  </div>
 </Base>
 
 <style>
@@ -92,7 +90,7 @@ import { leis } from '../../data/leis.js';
     cursor: pointer;
     font-weight: 600;
     text-decoration: underline;
-    text-decoration-color: var(--neon);
+    text-decoration-color: var(--sublinhado);
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
   }
@@ -102,7 +100,7 @@ import { leis } from '../../data/leis.js';
   .caso-detalhe h4:first-child { margin-top: 0; }
   .leis a { display: grid; gap: var(--s1); padding-block: var(--s5); text-decoration: none; }
   .lei-nome { font-family: var(--f-titulo); font-weight: 600; font-size: 1.25rem; }
-  .leis a:hover .lei-nome { text-decoration: underline; text-decoration-color: var(--neon); text-underline-offset: 4px; }
+  .leis a:hover .lei-nome { text-decoration: underline; text-decoration-color: var(--sublinhado); text-underline-offset: 4px; }
 </style>
 
 <script>
