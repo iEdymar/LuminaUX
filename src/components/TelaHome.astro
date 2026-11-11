@@ -5,7 +5,9 @@
   <div class="demo-topo">
     <p class="demo-rotulo">Um checkout comum. Quantos padrões enganosos você encontra?</p>
     <button class="btn btn-primario btn-pequeno" type="button" id="revelar" aria-pressed="false" aria-controls="tela-demo">
-      <span class="revelar-texto">Revelar padrões</span>
+      <!-- Os dois textos ocupam o mesmo lugar: o botão já nasce com a largura do maior e não pula de linha -->
+      <span class="revelar-texto" data-estado="desligado">Revelar padrões</span>
+      <span class="revelar-texto" data-estado="ligado" hidden>Esconder padrões</span>
     </button>
   </div>
 
@@ -57,19 +59,26 @@
 <style>
   .demo { margin: 0; display: grid; gap: var(--s4); }
   .demo-topo {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--s3);
+    gap: var(--s3) var(--s4);
+  }
+  #revelar { display: inline-grid; }
+  #revelar .revelar-texto { grid-area: 1 / 1; }
+  #revelar .revelar-texto[hidden] { display: block; visibility: hidden; }
+  @media (max-width: 400px) {
+    .demo-topo { grid-template-columns: 1fr; justify-items: start; }
   }
   .demo-rotulo { font-weight: 600; max-width: 30ch; }
   .demo .tela { max-width: 420px; width: 100%; justify-self: center; }
-  .demo-legenda { font-size: 0.875rem; color: var(--suave); text-align: center; }
+  /* Duas linhas reservadas: a legenda muda de texto sem empurrar o resto */
+  .demo-legenda { font-size: 0.875rem; line-height: 1.5; min-height: 3em; color: var(--suave); text-align: center; }
   .demo .alvo { padding: 2px 0; }
   .demo .alvo.caixa { padding-right: 4px; }
-  .demo .taxa { margin-top: 6px; }
-  .demo .revelado .taxa { margin-top: 26px; }
+  /* O espaço das marcações fica reservado desde o início: revelar não empurra a página */
+  .demo .alvo { margin-top: 18px; }
+  .demo .taxa { margin-top: 26px; }
 </style>
 
 <script>
@@ -80,8 +89,9 @@
     const ligado = botao.getAttribute('aria-pressed') === 'true';
     botao.setAttribute('aria-pressed', String(!ligado));
     tela?.classList.toggle('revelado', !ligado);
-    const texto = botao.querySelector('.revelar-texto');
-    if (texto) texto.textContent = ligado ? 'Revelar padrões' : 'Esconder padrões';
+    botao.querySelectorAll<HTMLElement>('.revelar-texto').forEach((t) => {
+      t.hidden = t.dataset.estado !== (ligado ? 'desligado' : 'ligado');
+    });
     if (legenda) {
       legenda.textContent = ligado
         ? 'Tela fictícia, criada para este hub.'
