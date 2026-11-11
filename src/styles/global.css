@@ -267,7 +267,8 @@ main:has(> .secao.tema-papel:last-child), main:has(> .faixa:last-child) { paddin
 .faixa-topo .secao-titulo { margin-bottom: 0; }
 
 /* Campos de formulário sobre o fundo claro */
-.tema-papel :is(input[type='text'], input[type='search'], select, textarea) { background: #fff; border-color: var(--linha-forte); }
+.tema-papel :is(input[type='text'], input[type='search'], select, textarea) { background: #fff; border-color: var(--linha-forte); color: var(--tinta); }
+.tema-papel :is(input, textarea)::placeholder { color: var(--tinta-suave); }
 /* Linha divisória alinhada à margem do conteúdo (para seções que também são .wrap) */
 .wrap.secao + .wrap.secao, .regua {
   background-image: linear-gradient(var(--linha), var(--linha));

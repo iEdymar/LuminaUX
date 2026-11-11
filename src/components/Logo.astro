@@ -19,6 +19,10 @@ interface Props {
 }
 
 const { mostrarNome = true, class: classe, destaque = 'var(--neon, #B9FC01)' } = Astro.props;
+
+// O final "UX" do nome ganha a cor de destaque (neon). Se o nome mudar e não terminar em UX, fica todo branco.
+const temUX = site.nome.endsWith('UX');
+const nomeBase = temUX ? site.nome.slice(0, -2) : site.nome;
 ---
 <span class="logo-lumina">
   <svg
@@ -45,7 +49,9 @@ const { mostrarNome = true, class: classe, destaque = 'var(--neon, #B9FC01)' } =
       d="M9.5 16.25c3.6-5.2 9.4-5.2 13 0-3.6 5.2-9.4 5.2-13 0Zm6.5 2.15a2.15 2.15 0 1 0 0-4.3 2.15 2.15 0 0 0 0 4.3Z"
     />
   </svg>
-  {mostrarNome && <span class="logo-nome">{site.nome}</span>}
+  {mostrarNome && (
+    <span class="logo-nome">{nomeBase}{temUX && <span class="logo-ux" style={`--logo-destaque: ${destaque}`}>UX</span>}</span>
+  )}
 </span>
 
 <style>
@@ -62,8 +68,9 @@ const { mostrarNome = true, class: classe, destaque = 'var(--neon, #B9FC01)' } =
   }
   .logo-simbolo { flex: none; }
   .logo-olho {
-    fill: var(--branco, #efefef);
+    fill: var(--logo-destaque);
   }
+  .logo-ux { color: var(--logo-destaque); }
   .logo-nome {
     font-family: var(--f-titulo, 'Poppins', sans-serif);
     font-weight: 700;
